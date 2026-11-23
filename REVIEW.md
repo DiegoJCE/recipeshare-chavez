@@ -1,13 +1,15 @@
 VERDICT: PASS
 
-I found no bugs or spec violations in commit 8356d6b. I didn't run the workflow, `npm test` or `npm run build`. There is no `SPEC.md`, so I used `docs/spec.md`.
+I read the diff and `docs/spec.md`. There is no `SPEC.md`. I didn't run the tests or the build. The commit adds a README and a README test, and changes no app code, so I found no crash risk.
 
-- **CI workflow (`.github/workflows/ci.yml`):** It meets spec E4 and plan step 11. It runs on push and pull_request, uses Node 20 with the npm cache, and runs `npm ci`, `npm test` and `npm run build`. It sets no `DATABASE_URL` and no secrets, and its permissions are `contents: read`.
-- **Scripts:** `package.json` defines `test` as `vitest run` and `build` as `next build`, so both CI commands exist.
-- **`package-lock.json`:** The file is in the repo. I couldn't confirm it is tracked in git because the check command was blocked. `npm ci` fails without a committed lockfile, so this is worth checking.
+README against spec E7 and E6:
+- **E7:** The README has the live URL, how to run the app and the tests, and a checklist of the M, S and Could features with a status for each.
+- **E6:** Only the name `DATABASE_URL` is listed. `.env.example` also holds just the name.
+- **Commands:** `npm test` and `npm run build` match the commands in `CLAUDE.md`. Node 20 matches `.github/workflows/ci.yml`.
 
 Minor points that don't block:
-1. `actions/checkout@v6` and `actions/setup-node@v6` are major-version tags. I didn't check that both exist. A wrong tag would make the first CI run fail.
-2. Plan step 11 is ticked, but its test condition says the Actions tab shows a green run after the push. That can't be known from this commit.
-3. `REVIEW.md` is rewritten in this commit with a review of the previous commit (`ac1ba55`), not this one. It is a process issue only.
-4. `agent_log.md` also shows as modified in the working tree.
+1. **Status marks M3, M5 and M6 as "Partly done".** The spec says a feature is done only when it passes on the deployed app. The README says the live checks are still open, which fits that rule. It is the honest status, but those three items still need a live check.
+2. **Live URL:** `https://recipeshare-chavez.vercel.app/` is not stated anywhere else in the repo. I can't verify it is the real production URL. If it's wrong, the README has a dead link and the URL test would still pass.
+3. **`lib/readme.test.js` is weak.** It only checks that the Vercel URL pattern and the M1–M7 rows exist. It reads `README.md` through `import.meta.url`, which is fine in Vitest. It would not notice a wrong URL or a wrong status.
+4. **Could-feature statuses:** "Phone-friendly layout: Done" is claimed before plan step 13, the design pass, which is still unticked in this commit. Mobile layout may not have been verified. The README doesn't say where "Phone-friendly layout" comes from either.
+5. **Process:** `REVIEW.md` is rewritten with the review of the previous commit (`8356d6b`), not this one. `agent_log.md` also shows as modified in the working tree.

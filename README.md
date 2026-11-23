@@ -14,16 +14,31 @@ RecipeShare lets visitors browse recipes from around the world, filter by cuisin
 
 Use Node.js 20, as configured in CI.
 
-1. Run `npm install`.
-2. Copy `.env.example` to `.env.local` and set `DATABASE_URL` to your Neon Postgres connection string.
-3. Run `npm run dev` and open [http://localhost:3000](http://localhost:3000).
+From the repository root, install dependencies and create your local environment file.
+
+```sh
+npm install
+cp .env.example .env.local
+```
+
+If `.env.local` already exists, skip the copy. Set `DATABASE_URL` in `.env.local` to your Neon Postgres connection string, then start the app.
+
+```sh
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). On Windows PowerShell, use `Copy-Item .env.example .env.local` to copy the file. If PowerShell blocks `npm.ps1`, use `npm.cmd` in place of `npm` for each command.
 
 The app creates the database tables on first use and adds two sample recipes when the recipes table is empty.
 
 ## Tests and build
 
-- Run `npm test` to run the full Vitest suite.
-- Run `npm run build` to create a production build. Tests and the build can run without database credentials.
+```sh
+npm test
+npm run build
+```
+
+`npm test` runs the full Vitest suite. `npm run build` creates a production build. Both commands can run without database credentials.
 
 ## Deployment
 
@@ -58,5 +73,10 @@ See the [product specification](docs/spec.md) for acceptance criteria. For Must 
 | Could | Embedded recipe video | Not done |
 | Could | Dietary tags and filtering | Not done |
 | Could | Phone-friendly layout | Done |
+| Could | Additional ideas | Not done |
 
 Live checks still open are submitting valid and incomplete recipes (M3), submitting a rating and confirming the updated average and count (M5), and checking that new data persists across devices and a redeploy (M6).
+
+## Built with
+
+RecipeShare was built with AI agents. Claude Opus planned and designed it, Codex built it, and Claude Sonnet reviewed it.

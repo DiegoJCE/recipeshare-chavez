@@ -55,3 +55,8 @@
 [ 27.5 min] review (claude): PASS
 [ 27.6 min] pushed to GitHub
 [ 27.6 min] building: 12. Write the README: project summary, live Vercel URL, tech stack, how to run locally (npm install, copy .env.example to .env.local and fill DATABASE_URL, npm run dev), how to run tests and build, how deployment works (push to main auto-deploys on Vercel, CI on every push), env var names only, and a checklist table of M1-M7, S1-S6 and Could features marked done / partly done / not done (files: README.md; test: every M feature is listed with its status and the live URL is present)
+[ 29.7 min] committed: build: 12. Write the README: project summary, live Vercel URL, tech
+[ 29.9 min] review (claude): PASS
+[ 30.0 min] pushed to GitHub
+[ 30.7 min] all tasks done
+[ 30.7 min] writing README
