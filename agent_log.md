@@ -51,3 +51,7 @@
 [ 21.5 min] review (claude): PASS
 [ 21.5 min] pushed to GitHub
 [ 21.6 min] building: 11. Add a GitHub Actions CI workflow that runs on every push and pull request: checkout, setup Node 20 with npm cache, `npm ci`, `npm test`, `npm run build` (no secrets, no DATABASE_URL) (files: .github/workflows/ci.yml, package-lock.json; test: the workflow YAML is valid and the same commands pass locally; after the orchestrator pushes, the Actions tab shows a green run)
+[ 27.3 min] committed: build: 11. Add a GitHub Actions CI workflow that runs on every push
+[ 27.5 min] review (claude): PASS
+[ 27.6 min] pushed to GitHub
+[ 27.6 min] building: 12. Write the README: project summary, live Vercel URL, tech stack, how to run locally (npm install, copy .env.example to .env.local and fill DATABASE_URL, npm run dev), how to run tests and build, how deployment works (push to main auto-deploys on Vercel, CI on every push), env var names only, and a checklist table of M1-M7, S1-S6 and Could features marked done / partly done / not done (files: README.md; test: every M feature is listed with its status and the live URL is present)

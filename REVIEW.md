@@ -1,16 +1,13 @@
 VERDICT: PASS
 
-I read the diff for `ac1ba55` and checked the code it touches. I could not run `npm test` or `npm run build` because the command needed approval, so neither was run. There is no `SPEC.md`, so I used `docs/spec.md`. Nothing in the commit contradicts the spec, and I found no crashes.
+I found no bugs or spec violations in commit 8356d6b. I didn't run the workflow, `npm test` or `npm run build`. There is no `SPEC.md`, so I used `docs/spec.md`.
 
-The commit only changes test files, `docs/plan.md`, `agent_log.md` and `REVIEW.md`. It touches no app code.
+- **CI workflow (`.github/workflows/ci.yml`):** It meets spec E4 and plan step 11. It runs on push and pull_request, uses Node 20 with the npm cache, and runs `npm ci`, `npm test` and `npm run build`. It sets no `DATABASE_URL` and no secrets, and its permissions are `contents: read`.
+- **Scripts:** `package.json` defines `test` as `vitest run` and `build` as `next build`, so both CI commands exist.
+- **`package-lock.json`:** The file is in the repo. I couldn't confirm it is tracked in git because the check command was blocked. `npm ci` fails without a committed lockfile, so this is worth checking.
 
-- **`lib/data.test.js`:**
-  - The test now uses a hoisted `vi.mock` for `./db.js` instead of `doMock` with a dynamic import. This is cleaner, and the mock is still a `vi.fn()` that needs no database.
-  - `sql.transaction` is reset in `beforeEach`.
-  - A new test covers `addRating` returning `null` for an unknown recipe.
-  - The removed `averageRating` assertion was checking the mock's own data, so dropping it loses nothing.
-- **`lib/sampleRecipes.test.js` (weaker, not blocking):**
-  - The old test required every sample recipe to have a unique cuisine and a unique category. The new test passes if any one pair of recipes differs in both. That is looser than spec M7, which wants at least 2 samples with different cuisines and categories. A set of 3 recipes with 2 sharing a cuisine would now pass.
-  - Dropping the explicit `CUISINES`/`CATEGORIES` list check is fine, because `validateRecipe` already enforces both lists (`lib/validate.js:18-19`).
-- **`docs/plan.md`:** Step 10 is ticked. The commit contains no new evidence that `npm test` and `npm run build` pass without `DATABASE_URL`, and the step's test condition requires that.
-- **`REVIEW.md`:** It holds the review of the previous commit (`d280ff5`), not this one. That is a process note, not a code issue.
+Minor points that don't block:
+1. `actions/checkout@v6` and `actions/setup-node@v6` are major-version tags. I didn't check that both exist. A wrong tag would make the first CI run fail.
+2. Plan step 11 is ticked, but its test condition says the Actions tab shows a green run after the push. That can't be known from this commit.
+3. `REVIEW.md` is rewritten in this commit with a review of the previous commit (`ac1ba55`), not this one. It is a process issue only.
+4. `agent_log.md` also shows as modified in the working tree.
