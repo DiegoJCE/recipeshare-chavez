@@ -1,19 +1,17 @@
 VERDICT: PASS
 
-There is no `SPEC.md`, so I used `docs/spec.md`. I did not run `npm test` or `npm run build`. The commit is a visual polish pass, and I found no crashes or spec violations in the diff.
+I found no bugs, crashes or spec violations in commit d280ff5 (M6 + M7). I read the diff and the related app files. I did not run the tests or the build.
 
-- **Behavior unchanged:**
-  - The recipe form, filter form, rating form and server action wiring are the same.
-  - The filter bar still uses `<select>` drop-downs from the fixed lists, with the same `name` attributes and the "Clear" link.
-  - "No recipes found" is still shown.
-  - The rating buttons still submit `name="rating"` with values 1–5.
-  - Form errors still use `role="alert"`.
-- **M1/M2:**
-  - Cards still show photo, title, cuisine, category and average rating with a count.
-  - The cuisine appears twice on a card: in the visible stamp and in a screen-reader-only span. This is harmless.
-  - The detail page still shows all fields, the author, and the ingredient and step lists.
-- **CSS:** The classes the JS uses are defined in `globals.css`, including `.sr-only`, `.stamp`, `.recipe-card-photo` and `.recipe-detail-photo img`. The file also has a `prefers-reduced-motion` rule.
+What I checked:
+- **M6 (database):** `lib/data.js` and `lib/db.js` use `@neondatabase/serverless` with `DATABASE_URL`. The `getRecipes`, `getRecipe`, `addRecipe` and `addRating` interface is unchanged, so the pages need no edits.
+- **M7 (sample data):** Setup seeds two recipes only when the `recipes` table is empty. They are Mexican / Main Dish and American / Breakfast, so the cuisines and categories differ. An advisory lock inside the setup transaction keeps concurrent instances from seeding twice.
+- **Build safety:** `app/page.js` and `app/recipes/[id]/page.js` both set `dynamic = 'force-dynamic'`. `DATABASE_URL` is read lazily inside `getDatabase()`, so `next build` shouldn't touch the database.
+- **Validation:** `validateRecipe` requires `prepTimeMinutes` to be a positive safe integer. This matches the `bigint CHECK (> 0)` column, so a value like 1.5 can't reach the insert.
+- **Ratings:** The `ratings` table checks the value is 1–5. `addRating` inserts only if the recipe exists, and does the insert and the re-read in one transaction.
+- **Secrets:** `.env.example` lists the `DATABASE_URL` name only.
+- **Tests:** The new tests mock the database. The old in-memory rating test was removed and replaced by a mocked `addRating` test, which fits E3.
 
-Minor issues, none blocking:
-1. **External fonts:** `app/layout.js` loads Google Fonts through a hand-written `<link>` in `<head>`. This works, but `next/font` would be the more idiomatic choice. The fonts are loaded from the network at runtime, so the app is fine offline or if they fail. Fallback fonts in the CSS would cover that case.
-2. **Stale review notes:** `REVIEW.md` in this commit contains the previous commit's (M5) review, not a review of step 13. `agent_log.md` was already modified before the commit.
+Minor points, none of which block:
+1. The `ratings` and `position` columns are not part of the seed insert. That is fine, because `ratings` is derived by a subquery.
+2. Sample ids are fixed (`black-bean-tacos` and so on). If someone deletes every recipe, the seed runs again. That is harmless without an admin panel.
+3. `getDatabase` caches the connection promise at module level. A failed setup clears the cache, so the next request retries.
