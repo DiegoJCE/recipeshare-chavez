@@ -1,2 +1,4 @@
 [  0.0 min] start build. budget 60.0 min. builder: codex. reviewer: claude sonnet
 [  0.0 min] planning with opus
+[  3.8 min] committed: plan
+[  3.8 min] building: 1. Scaffold a runnable Next.js App Router (JavaScript) app with Vitest: package.json scripts (dev, build, start, test), lib/constants.js with the fixed CUISINES and CATEGORIES lists from the spec, lib/data.js with in-memory sample data (2 recipes, different cuisine and category, each with an image URL and ratings array) exposing getRecipes/getRecipe/addRecipe/addRating, and a home page that lists recipe titles; `npm run dev`, `npm test` and `npm run build` all succeed (files: package.json, next.config.mjs, vitest.config.mjs, jsconfig.json, app/layout.js, app/page.js, app/globals.css, lib/constants.js, lib/data.js, lib/constants.test.js; test: lib/constants.test.js checks the cuisine and category lists exactly match the spec)
