@@ -31,3 +31,13 @@
 [ 50.2 min] review (claude): PASS
 [ 50.3 min] pushed to GitHub
 [ 50.7 min] designing with opus: 13. DESIGN: Visual polish pass without changing any behavior: a passport and world-travel theme with cuisine badges styled as rotated passport stamps and recipe cards styled like travel postcards, a palette defined as CSS variables (navy #1F2A44, stamp red #B83A2E, paper #F4ECDD, gold #C9A227), Fraunces for headings and IBM Plex Sans for body text (both from Google Fonts), a clear header with the app name and "Add recipe" button, a responsive card grid with consistent image aspect ratio, rounded corners and soft shadows, readable detail page layout, styled form with clear inline error messages, styled filter bar and star rating buttons with hover/focus states, a subtle card fade-in animation, and good layout on phone and desktop widths; run all tests and the build afterwards (files: app/globals.css, app/layout.js, app/page.js, app/recipes/[id]/page.js, app/recipes/new/page.js, components/*.js; test: `npm test` and `npm run build` still pass and the app looks right at mobile and desktop widths)
+[ 54.0 min] committed: build: 13. DESIGN: Visual polish pass without changing any behavior
+[ 54.2 min] review (claude): PASS
+[ 54.3 min] pushed to GitHub
+[ 54.3 min] you pressed q
+[ 54.3 min] design pass done -> skipping remaining tasks: 8. MANUAL: Create the free Neo; 9. M6 + M7: Switch lib/data.js; 10. Review tests: make sure at; 11. Add a GitHub Actions CI wo; 12. Write the README: project 
+[ 54.3 min] writing README
+[  0.0 min] start build. budget 180.0 min. builder: codex. reviewer: claude sonnet
+[  0.0 min] PLAN.md has unfinished tasks -> resuming, skipping planning
+[  0.0 min] manual step for you: 8. MANUAL: Create the free Neon database and connect it. In the Vercel dashboard open the recipeshare project, click the "Storage" tab, click "Create Database", choose "Neon" (Serverless Postgres), click "Continue", accept the terms, pick the "Free" plan and the region closest to you, click "Continue", name it recipeshare-db, click "Create", then in "Connect Project" select recipeshare with Development, Preview and Production all checked and click "Connect"; confirm under Settings > Environment Variables that DATABASE_URL exists; then on the database page click the ".env.local" tab, click "Copy Snippet", create a file named .env.local in the repo root and paste it (it must contain DATABASE_URL; never commit this file) (files: .env.local (local only, git-ignored); test: Vercel Settings > Environment Variables lists DATABASE_URL and the local .env.local contains DATABASE_URL)
+[  0.0 min] pushed to GitHub

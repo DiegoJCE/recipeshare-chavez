@@ -1,16 +1,19 @@
 VERDICT: PASS
 
-I reviewed the diff and `lib/data.js`. `SPEC.md` doesn't exist, so I used `docs/spec.md`. I didn't run `npm test` or `npm run build`. I found no crashes and nothing that contradicts M5.
+There is no `SPEC.md`, so I used `docs/spec.md`. I did not run `npm test` or `npm run build`. The commit is a visual polish pass, and I found no crashes or spec violations in the diff.
 
-**Spec match (M5):**
-- The detail page has five submit buttons named `rating`.
-- The server action rejects non-string values and anything that isn't an integer from 1 to 5.
-- It calls `addRating`, then revalidates both `/recipes/${id}` and `/`. The average and count update on the detail page and the card, as M5 requires.
-- The detail page is `force-dynamic`, so the data stays fresh.
+- **Behavior unchanged:**
+  - The recipe form, filter form, rating form and server action wiring are the same.
+  - The filter bar still uses `<select>` drop-downs from the fixed lists, with the same `name` attributes and the "Clear" link.
+  - "No recipes found" is still shown.
+  - The rating buttons still submit `name="rating"` with values 1–5.
+  - Form errors still use `role="alert"`.
+- **M1/M2:**
+  - Cards still show photo, title, cuisine, category and average rating with a count.
+  - The cuisine appears twice on a card: in the visible stamp and in a screen-reader-only span. This is harmless.
+  - The detail page still shows all fields, the author, and the ingredient and step lists.
+- **CSS:** The classes the JS uses are defined in `globals.css`, including `.sr-only`, `.stamp`, `.recipe-card-photo` and `.recipe-detail-photo img`. The file also has a `prefers-reduced-motion` rule.
 
-**Minor problems, none blocking:**
-1. **Silent failures:** The action returns with no message when the rating is invalid or the recipe id is unknown. Users see nothing, but the five fixed buttons make this hard to hit.
-2. **No confirmation:** After rating, nothing says "Thanks" or highlights the chosen rating. The form is also shown on every visit, so repeat ratings are allowed. That is fine for M5, since S3 covers one rating per user.
-3. **Test:** The `addRecipe({ title })` test relies on the in-memory `lib/data.js`. It will break or need a database when step 9 switches to Neon (step 10 requires tests without a database). It also leaves its recipe in the shared `globalThis` store.
-4. **Button labels:** The buttons read "1 star" to "5 stars" rather than star icons. That works but looks plain until the DESIGN step.
-5. **Files outside the step's list:** The commit also changes `REVIEW.md` and `agent_log.md`. Both are orchestrator artifacts, and `REVIEW.md` now holds the review of the previous commit.
+Minor issues, none blocking:
+1. **External fonts:** `app/layout.js` loads Google Fonts through a hand-written `<link>` in `<head>`. This works, but `next/font` would be the more idiomatic choice. The fonts are loaded from the network at runtime, so the app is fine offline or if they fail. Fallback fonts in the CSS would cover that case.
+2. **Stale review notes:** `REVIEW.md` in this commit contains the previous commit's (M5) review, not a review of step 13. `agent_log.md` was already modified before the commit.
