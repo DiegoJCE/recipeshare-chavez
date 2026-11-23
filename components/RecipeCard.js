@@ -7,12 +7,21 @@ export default function RecipeCard({ recipe }) {
 
   return (
     <article className="recipe-card">
-      <Link href={`/recipes/${id}`} style={{ display: 'block', height: '100%', color: 'inherit' }}>
-        <img src={imageUrl} alt={title} />
+      <Link href={`/recipes/${id}`} className="recipe-card-link">
+        <div className="recipe-card-photo">
+          <img src={imageUrl} alt={title} />
+          <span className="stamp">{cuisine}</span>
+        </div>
         <div className="recipe-card-content">
           <h2>{title}</h2>
-          <p>{cuisine} · {category}</p>
-          <p>{averageRating(ratings).toFixed(1)} / 5 ({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})</p>
+          <div className="recipe-card-meta">
+            <p><span className="sr-only">{cuisine} · </span><span className="tag">{category}</span></p>
+            <p className="rating-summary">
+              <span className="star" aria-hidden="true">★</span>
+              {averageRating(ratings).toFixed(1)} / 5{' '}
+              <span className="rating-count">({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})</span>
+            </p>
+          </div>
         </div>
       </Link>
     </article>

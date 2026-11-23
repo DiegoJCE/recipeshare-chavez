@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RatingForm from '@/components/RatingForm';
 import { getRecipe } from '@/lib/data';
@@ -15,24 +16,62 @@ export default async function RecipePage({ params }) {
   const ratingCount = ratings.length;
 
   return (
-    <main>
-      <h1>{title}</h1>
-      <p>By {authorName}</p>
-      <img src={imageUrl} alt={title} style={{ display: 'block', maxWidth: '100%', height: 'auto' }} />
-      <p>{cuisine} · {category}</p>
-      <p>Prep time: {prepTimeMinutes} minutes</p>
-      <p>Average rating: {averageRating(ratings).toFixed(1)} / 5 ({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})</p>
-      <RatingForm action={rateRecipe.bind(null, id)} />
+    <main className="narrow">
+      <Link href="/" className="back-link">← All recipes</Link>
+      <article className="recipe-detail">
+        <div className="recipe-detail-photo">
+          <img src={imageUrl} alt={title} />
+          <span className="stamp">{cuisine}</span>
+        </div>
 
-      <h2>Ingredients</h2>
-      <ul>
-        {ingredients.map((ingredient, index) => <li key={index}>{ingredient}</li>)}
-      </ul>
+        <div className="recipe-detail-body">
+          <h1>{title}</h1>
+          <p className="byline">By {authorName}</p>
 
-      <h2>Steps</h2>
-      <ol>
-        {steps.map((step, index) => <li key={index}>{step}</li>)}
-      </ol>
+          <dl className="facts">
+            <div className="fact">
+              <dt>Cuisine</dt>
+              <dd>{cuisine}</dd>
+            </div>
+            <div className="fact">
+              <dt>Category</dt>
+              <dd>{category}</dd>
+            </div>
+            <div className="fact">
+              <dt>Prep time</dt>
+              <dd>{prepTimeMinutes} minutes</dd>
+            </div>
+            <div className="fact">
+              <dt>Average rating</dt>
+              <dd>
+                <span className="rating-summary">
+                  <span className="star" aria-hidden="true">★</span>
+                  {averageRating(ratings).toFixed(1)} / 5{' '}
+                  <span className="rating-count">({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})</span>
+                </span>
+              </dd>
+            </div>
+          </dl>
+
+          <RatingForm action={rateRecipe.bind(null, id)} />
+
+          <div className="recipe-sections">
+            <section>
+              <h2>Ingredients</h2>
+              <ul className="ingredient-list">
+                {ingredients.map((ingredient, index) => <li key={index}>{ingredient}</li>)}
+              </ul>
+            </section>
+
+            <section>
+              <h2>Steps</h2>
+              <ol className="step-list">
+                {steps.map((step, index) => <li key={index}>{step}</li>)}
+              </ol>
+            </section>
+          </div>
+        </div>
+      </article>
     </main>
   );
 }

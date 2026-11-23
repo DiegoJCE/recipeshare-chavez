@@ -23,11 +23,13 @@ export default function RecipeForm() {
   });
 
   return (
-    <form action={action} noValidate>
+    <form action={action} noValidate className="recipe-form">
       {fields.map((field) => (
         <RecipeField key={`${field.name}-${attempt}`} field={field} value={values[field.name]} error={errors[field.name]} />
       ))}
-      <button type="submit" disabled={pending}>Save recipe</button>
+      <div className="form-actions">
+        <button type="submit" disabled={pending} className="button button-primary">Save recipe</button>
+      </div>
     </form>
   );
 }
@@ -57,10 +59,10 @@ function RecipeField({ field, value, error }) {
   }
 
   return (
-    <p>
-      <label htmlFor={name}>{label}</label><br />
+    <div className={multiline || type === 'url' ? 'field field-wide' : 'field'}>
+      <label htmlFor={name} className="field-label">{label}</label>
       {input}
-      {error && <><br /><span id={errorId} role="alert">{error}</span></>}
-    </p>
+      {error && <span id={errorId} role="alert" className="field-error">{error}</span>}
+    </div>
   );
 }
