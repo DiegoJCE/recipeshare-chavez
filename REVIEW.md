@@ -1,17 +1,16 @@
 VERDICT: PASS
 
-I found no bugs, crashes or spec violations in commit d280ff5 (M6 + M7). I read the diff and the related app files. I did not run the tests or the build.
+I read the diff for `ac1ba55` and checked the code it touches. I could not run `npm test` or `npm run build` because the command needed approval, so neither was run. There is no `SPEC.md`, so I used `docs/spec.md`. Nothing in the commit contradicts the spec, and I found no crashes.
 
-What I checked:
-- **M6 (database):** `lib/data.js` and `lib/db.js` use `@neondatabase/serverless` with `DATABASE_URL`. The `getRecipes`, `getRecipe`, `addRecipe` and `addRating` interface is unchanged, so the pages need no edits.
-- **M7 (sample data):** Setup seeds two recipes only when the `recipes` table is empty. They are Mexican / Main Dish and American / Breakfast, so the cuisines and categories differ. An advisory lock inside the setup transaction keeps concurrent instances from seeding twice.
-- **Build safety:** `app/page.js` and `app/recipes/[id]/page.js` both set `dynamic = 'force-dynamic'`. `DATABASE_URL` is read lazily inside `getDatabase()`, so `next build` shouldn't touch the database.
-- **Validation:** `validateRecipe` requires `prepTimeMinutes` to be a positive safe integer. This matches the `bigint CHECK (> 0)` column, so a value like 1.5 can't reach the insert.
-- **Ratings:** The `ratings` table checks the value is 1–5. `addRating` inserts only if the recipe exists, and does the insert and the re-read in one transaction.
-- **Secrets:** `.env.example` lists the `DATABASE_URL` name only.
-- **Tests:** The new tests mock the database. The old in-memory rating test was removed and replaced by a mocked `addRating` test, which fits E3.
+The commit only changes test files, `docs/plan.md`, `agent_log.md` and `REVIEW.md`. It touches no app code.
 
-Minor points, none of which block:
-1. The `ratings` and `position` columns are not part of the seed insert. That is fine, because `ratings` is derived by a subquery.
-2. Sample ids are fixed (`black-bean-tacos` and so on). If someone deletes every recipe, the seed runs again. That is harmless without an admin panel.
-3. `getDatabase` caches the connection promise at module level. A failed setup clears the cache, so the next request retries.
+- **`lib/data.test.js`:**
+  - The test now uses a hoisted `vi.mock` for `./db.js` instead of `doMock` with a dynamic import. This is cleaner, and the mock is still a `vi.fn()` that needs no database.
+  - `sql.transaction` is reset in `beforeEach`.
+  - A new test covers `addRating` returning `null` for an unknown recipe.
+  - The removed `averageRating` assertion was checking the mock's own data, so dropping it loses nothing.
+- **`lib/sampleRecipes.test.js` (weaker, not blocking):**
+  - The old test required every sample recipe to have a unique cuisine and a unique category. The new test passes if any one pair of recipes differs in both. That is looser than spec M7, which wants at least 2 samples with different cuisines and categories. A set of 3 recipes with 2 sharing a cuisine would now pass.
+  - Dropping the explicit `CUISINES`/`CATEGORIES` list check is fine, because `validateRecipe` already enforces both lists (`lib/validate.js:18-19`).
+- **`docs/plan.md`:** Step 10 is ticked. The commit contains no new evidence that `npm test` and `npm run build` pass without `DATABASE_URL`, and the step's test condition requires that.
+- **`REVIEW.md`:** It holds the review of the previous commit (`d280ff5`), not this one. That is a process note, not a code issue.

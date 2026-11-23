@@ -47,3 +47,7 @@
 [ 18.8 min] review (claude): PASS
 [ 18.8 min] pushed to GitHub
 [ 19.0 min] building: 10. Review tests: make sure at least 3 meaningful test files pass (filter, average rating, required-field validation, plus the others), remove duplicates or flaky tests, ensure no test needs a database or network, then run `npm test` and `npm run build` with DATABASE_URL unset and fix anything that fails (files: lib/*.test.js, vitest.config.mjs; test: `npm test` passes all tests and `npm run build` passes without DATABASE_URL)
+[ 21.2 min] committed: build: 10. Review tests: make sure at least 3 meaningful test files
+[ 21.5 min] review (claude): PASS
+[ 21.5 min] pushed to GitHub
+[ 21.6 min] building: 11. Add a GitHub Actions CI workflow that runs on every push and pull request: checkout, setup Node 20 with npm cache, `npm ci`, `npm test`, `npm run build` (no secrets, no DATABASE_URL) (files: .github/workflows/ci.yml, package-lock.json; test: the workflow YAML is valid and the same commands pass locally; after the orchestrator pushes, the Actions tab shows a green run)
