@@ -17,3 +17,7 @@
 [ 26.4 min] review (claude): PASS
 [ 26.5 min] pushed to GitHub
 [ 28.3 min] building: 5. M3: Add /recipes/new with a form (author name, title, cuisine and category as drop-downs from lib/constants.js, ingredients textarea, steps textarea, prep time minutes number, image URL) submitted through a server action; put validation in lib/validate.js (validateRecipe returns an errors object naming each missing/invalid field: empty required fields, prep time not a positive whole number, cuisine/category not in the fixed lists, image not an http(s) URL); on errors nothing is saved and each missing field is shown next to its input; on success redirect to the home page where the new recipe appears; add an "Add recipe" link in the header (files: app/recipes/new/page.js, app/recipes/new/actions.js, components/RecipeForm.js, lib/validate.js, lib/data.js, app/layout.js, lib/validate.test.js; test: lib/validate.test.js checks a full valid recipe has no errors, each empty required field is reported by name, and a cuisine outside the list is rejected)
+[ 44.2 min] committed: build: 5. M3: Add /recipes/new with a form (author name, title, cui
+[ 44.4 min] review (claude): PASS
+[ 44.5 min] pushed to GitHub
+[ 44.8 min] your change: update the DESIGN step in docs/plan.md: passport/world-travel theme. cuisine badges styled as rotated passport stamps, recipe cards like travel postcards, colors navy #1F2A44, stamp red #B83A2E, paper #F4ECDD, gold #C9A227, fonts Fraunces (headings) and IBM Plex Sans (body) from Google Fonts

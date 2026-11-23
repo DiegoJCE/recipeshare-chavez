@@ -1,16 +1,11 @@
 VERDICT: PASS
 
-I read the code only. I didn't run `npm test` or `npm run build`. I read `docs/spec.md`, because `SPEC.md` doesn't exist. The commit meets M2 and the plan step 4 criteria, and I found no crashes.
+I read the code only. I didn't run `npm test` or `npm run build`. I read `docs/spec.md`, because `SPEC.md` doesn't exist. I found no crashes and nothing that contradicts M3. The form has all eight fields, and cuisine and category are drop-downs from the fixed lists. Nothing is saved on error, and each error shows next to its input. On success the action redirects to `/`, and the new recipe appears there.
 
-- **Detail page:** it shows the image, title, author name, cuisine, category, prep time, ingredients as a list, steps as a numbered list, and average rating with count. That is every recipe field.
-- **404:** an unknown id calls `notFound()` because `getRecipe` returns null. The page is `force-dynamic`, so nothing is read at build time.
-- **Params:** `await params` is correct for the Next version that needs it.
-- **Card link:** `RecipeCard` links to `/recipes/${id}`. The sample ids are plain slugs. Ids from `randomUUID()` are also URL-safe.
-- **Tests:** the tests check that `getRecipe` returns the matching recipe and null for an unknown id. The two checks are correct.
-
-Minor problems, none blocking:
-1. The commit also modifies `REVIEW.md`, which the plan's file list for step 4 doesn't include. That file is a reviewer's output for the previous step. It is clutter in the repo and has nothing to do with M2.
-2. The card puts an `<h2>` inside the `<Link>`. That is valid HTML5, but the link has no visible focus or hover style beyond the inline `color: inherit`.
-3. A recipe with no ratings shows "0.0 / 5 (0 ratings)" on both the card and the detail page. "No ratings yet" would read better. The earlier step has the same behaviour.
-4. The detail page uses a plain `<img>`. The plan asks for that, but Next's lint rule `@next/next/no-img-element` may warn.
-5. In-memory data doesn't persist on Vercel. M6 covers this.
+Minor issues, none blocking:
+1. **Prep time:** `lib/validate.js` accepts any string that `Number()` parses to a positive safe integer. `"1e3"`, `"0x10"` and `" 5 "` all pass, and the action then stores `Number(...)`. Real users won't hit this, but a `/^\d+$/` check on trimmed strings would be stricter.
+2. **Required fields:** the form sets `required` on every input but also uses `noValidate`, so the server-side messages are the only feedback. That is consistent. The `required` attribute is only used for accessibility.
+3. **In-memory store:** `lib/data.js` keeps recipes in a `globalThis` array. On Vercel serverless, a recipe added in one instance may not show up in another, or after a cold start. M6 (the database) covers this.
+4. **Node version:** `URL.canParse` needs Node 19.9 or later. That is fine on Vercel's current runtimes, but older local Node versions would throw.
+5. **Stray file:** the commit also changes `REVIEW.md`, which is not in the plan's file list for step 5.
+6. **Tests:** `lib/validate.test.js` covers empty fields, cuisine and category outside the lists, bad prep times and bad image URLs. Nothing tests the server action or the form component. That matches the plan.
