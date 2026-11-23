@@ -1,6 +1,8 @@
 import { notFound } from 'next/navigation';
+import RatingForm from '@/components/RatingForm';
 import { getRecipe } from '@/lib/data';
 import { averageRating } from '@/lib/ratings';
+import { rateRecipe } from './actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +22,7 @@ export default async function RecipePage({ params }) {
       <p>{cuisine} · {category}</p>
       <p>Prep time: {prepTimeMinutes} minutes</p>
       <p>Average rating: {averageRating(ratings).toFixed(1)} / 5 ({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})</p>
+      <RatingForm action={rateRecipe.bind(null, id)} />
 
       <h2>Ingredients</h2>
       <ul>
