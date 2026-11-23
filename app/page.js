@@ -1,3 +1,4 @@
+import RecipeCard from '@/components/RecipeCard';
 import { getRecipes } from '@/lib/data';
 
 export const dynamic = 'force-dynamic';
@@ -8,9 +9,11 @@ export default async function HomePage() {
   return (
     <main>
       <h1>RecipeShare</h1>
-      <ul>
+      <ul className="recipe-grid">
         {recipes.map((recipe) => (
-          <li key={recipe.id}>{recipe.title}</li>
+          <li key={recipe.id}>
+            <RecipeCard recipe={recipe} />
+          </li>
         ))}
       </ul>
     </main>

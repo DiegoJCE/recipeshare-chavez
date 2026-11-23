@@ -11,3 +11,39 @@ main {
   margin-inline: auto;
   padding: 2rem 1rem;
 }
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.recipe-card {
+  overflow: hidden;
+  height: 100%;
+  border: 1px solid #eaded4;
+  border-radius: 0.75rem;
+  background: #fff;
+}
+
+.recipe-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.recipe-card-content {
+  padding: 1rem;
+}
+
+.recipe-card h2,
+.recipe-card p {
+  margin: 0;
+}
+
+.recipe-card p {
+  margin-top: 0.25rem;
+}
