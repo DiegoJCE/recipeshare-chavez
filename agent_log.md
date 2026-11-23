@@ -21,3 +21,5 @@
 [ 44.4 min] review (claude): PASS
 [ 44.5 min] pushed to GitHub
 [ 44.8 min] your change: update the DESIGN step in docs/plan.md: passport/world-travel theme. cuisine badges styled as rotated passport stamps, recipe cards like travel postcards, colors navy #1F2A44, stamp red #B83A2E, paper #F4ECDD, gold #C9A227, fonts Fraunces (headings) and IBM Plex Sans (body) from Google Fonts
+[ 45.5 min] committed: user change: update the DESIGN step in docs/plan.md: passport/w
+[ 46.2 min] building: 6. M4: Add cuisine and category drop-down filters (each with an "All" option) on the home page using URL search params (?cuisine=&category=), a "Clear" link that shows all recipes, and the text "No recipes found" when nothing matches; put filtering in lib/filter.js (filterRecipes(recipes, {cuisine, category}) matching both when both are set) (files: lib/filter.js, components/FilterBar.js, app/page.js, lib/filter.test.js; test: lib/filter.test.js checks Iranian + Main Dish returns only recipes matching both, empty filters return all, and no match returns an empty list)
