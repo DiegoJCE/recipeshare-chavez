@@ -9,3 +9,7 @@
 [ 12.3 min] pushed to GitHub
 [ 20.4 min] committed: done manual step: 2. MANUAL: Deploy early to Vercel. Make sure the r
 [ 20.4 min] building: 3. M1: Show recipe cards on the home page with photo (plain img from the image URL), title, cuisine, category and average rating with rating count; put average calculation in lib/ratings.js (averageRating returns 0 for no ratings, rounded to 1 decimal); mark the home page dynamic (files: lib/ratings.js, components/RecipeCard.js, app/page.js, app/globals.css, lib/ratings.test.js; test: lib/ratings.test.js covers empty ratings, a single rating and a mixed list rounding to 1 decimal)
+[ 22.3 min] committed: build: 3. M1: Show recipe cards on the home page with photo (plain 
+[ 22.7 min] review (claude): PASS
+[ 22.7 min] pushed to GitHub
+[ 24.4 min] building: 4. M2: Make each card link to /recipes/[id], a detail page showing every field (image, title, author name, cuisine, category, prep time in minutes, ingredients as a list, steps as a numbered list, average rating and count) and a 404 via notFound() for an unknown id (files: app/recipes/[id]/page.js, components/RecipeCard.js, lib/data.js, lib/data.test.js; test: lib/data.test.js checks getRecipe returns the right recipe by id and null for an unknown id)
