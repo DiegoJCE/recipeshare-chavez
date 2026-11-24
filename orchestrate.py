@@ -234,18 +234,32 @@ def push():
 
 # ======================= EDIT MODE =======================
 if args.edit:
+    if args.minutes == 40:
+        args.minutes = 120  # edit mode: plenty of time per batch
     log(f"edit mode. builder: {builder}. reviewer: {'codex' if codex_ok else 'claude ' + args.reviewer_model}")
+    queue = []
     while left() > 60:
-        change = ask_multiline("\nWhat do you want to change? (empty line = finish and push)")
-        if not change:
-            break
-        log(f"change: {change}")
-        build(f"Make this change to the app: {change}. Keep everything else working. "
-              "If the change affects features, update docs/spec.md to match. "
+        if not queue:
+            print("\nWhat do you want to change? ONE change per line; each line is built, reviewed,")
+            print("committed and pushed separately, in order. Empty line = start / finish.")
+            while True:
+                line = input().strip()
+                if not line:
+                    break
+                queue.append(line)
+            if not queue:
+                break
+            DEADLINE = time.time() + args.minutes * 60  # timer starts after you type, not before
+        change = queue.pop(0)
+        log(f"change ({len(queue)} more queued): {change}")
+        build(f"Make this change to the app: {change}. Keep everything else working and keep the "
+              "existing visual design. NEVER modify docs/spec.md (it is the instructor's spec). "
+              "If the change is a feature, add a test for it and run ALL tests. "
               "Run the app to confirm it works. Do not run git commit.")
-        commit(f"change: {change[:50]}")
+        commit(f"change: {change[:60]}")
         verdict = review_and_fix()
-        print(f"\nReview: {verdict[:600]}\nOpen the app and check it.")
+        push()
+        print(f"\nReview: {verdict[:600]}")
     push()
     log("done")
     sys.exit()
@@ -384,7 +398,8 @@ while not stop and left() > 300:
             break
         log(f"your change: {ans}")
         build(f"Make this change requested by the user: {ans}. Run the app to confirm it "
-              "still works. Keep the existing visual design. Do not run git commit.")
+              "still works. Keep the existing visual design. Never modify docs/spec.md. "
+              "Do not run git commit.")
         commit(f"user change: {ans[:50]}")
     if "DESIGN:" in task and tasks():
         log("design pass done -> skipping remaining tasks: " + "; ".join(t[:30] for t in tasks()))

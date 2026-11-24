@@ -6,10 +6,12 @@ export const googleSignInEnabled = Boolean(
 );
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [Google],
+  providers: googleSignInEnabled ? [Google] : [],
   callbacks: {
-    signIn({ profile }) {
-      return profile?.email_verified === true && Boolean(profile.email && profile.name?.trim());
+    signIn({ account, profile }) {
+      return account?.provider === 'google'
+        && profile?.email_verified === true
+        && hasRecipeIdentity(profile);
     },
     jwt({ token }) {
       return { name: token.name, email: token.email };
@@ -19,5 +21,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
 export async function getSignedInUser() {
   if (!googleSignInEnabled) return null;
-  return (await auth())?.user ?? null;
+  const user = (await auth())?.user;
+  return hasRecipeIdentity(user) ? user : null;
+}
+
+function hasRecipeIdentity(user) {
+  return typeof user?.name === 'string' && user.name.trim() !== ''
+    && typeof user.email === 'string' && user.email.trim() !== '';
 }

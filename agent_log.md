@@ -83,3 +83,8 @@
 [ 48.7 min] change: S1: Google sign-in with Auth.js (next-auth v5) using env vars AUTH_SECRET, AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET (add the names to .env.example). Sign in / sign out button in the header. When signed in, the user's name is the author of new recipes (store the user's email with the recipe). Add a /profile page listing the signed-in user's recipes. Visitors who are NOT signed in must still be able to browse, filter, add recipes with an author name, and rate, exactly as before. npm run build must still pass without the auth env vars. Add a test and run all tests. add a simple /privacy page (linked in the footer) saying RecipeShare stores only your Google name and email to show you as a recipe author, and does not share data
 [ 52.9 min] codex builder failed (TIMEOUT) -> switching builder to sonnet
 [ 53.4 min] claude (sonnet) exited 124: TIMEOUT
+[ 53.5 min] committed: change: S1: Google sign-in with Auth.js (next-auth v5) usi
+[ 53.5 min] pushed to GitHub
+[ 53.5 min] done
+[  0.0 min] edit mode. builder: codex. reviewer: claude sonnet
+[  0.1 min] change (1 more queued): finish the Google sign-in (S1) that was started in the last commit: Auth.js (next-auth v5) with AUTH_SECRET, AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET; sign in/out button in the header; signed-in user's name is the author of new recipes; /profile page listing their recipes; visitors not signed in can still browse, filter, add, and rate as before; npm run build passes without auth env vars; add a test and run all tests
