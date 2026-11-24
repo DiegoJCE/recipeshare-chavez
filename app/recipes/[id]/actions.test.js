@@ -9,17 +9,17 @@ vi.mock('../../../lib/db.js', () => ({ getDatabase: vi.fn() }));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 
 const recipeId = 'test-recipe';
-const author = { email: 'author@example.com' };
-const reader = { email: 'reader@example.com' };
+const author = { email: 'author@example.com', googleSubject: 'google-author' };
+const reader = { email: author.email, googleSubject: 'google-reader' };
 const ratings = new Map();
-const sql = vi.fn((parts, value, email, id, ownershipEmail) => {
+const sql = vi.fn((parts, value, subject, id, ownershipSubject) => {
   const query = parts.join('?');
-  expect(query).toContain('WHERE id = ? AND author_email IS DISTINCT FROM ?');
-  expect(query).toContain('ON CONFLICT (recipe_id, rater_email) DO UPDATE SET value = EXCLUDED.value');
-  expect(ownershipEmail).toBe(email);
-  if (id !== recipeId || ownershipEmail === author.email) return [];
+  expect(query).toContain('WHERE id = ? AND author_google_subject IS DISTINCT FROM ?');
+  expect(query).toContain('ON CONFLICT (recipe_id, rater_google_subject) DO UPDATE SET value = EXCLUDED.value');
+  expect(ownershipSubject).toBe(subject);
+  if (id !== recipeId || ownershipSubject === author.googleSubject) return [];
 
-  ratings.set(email, value);
+  ratings.set(subject, value);
   return [{ id: 1 }];
 });
 
@@ -32,7 +32,7 @@ beforeEach(() => {
 function ratingForm(value) {
   const form = new FormData();
   form.set('rating', value);
-  form.set('raterEmail', reader.email);
+  form.set('raterSubject', reader.googleSubject);
   return form;
 }
 
@@ -44,15 +44,15 @@ it('replaces a signed-in reader’s rating and refreshes the detail and card', a
   vi.mocked(revalidatePath).mockClear();
   await rateRecipe(recipeId, ratingForm('5'));
 
-  expect([...ratings]).toEqual([[reader.email, 5]]);
+  expect([...ratings]).toEqual([[reader.googleSubject, 5]]);
   expect(revalidatePath.mock.calls).toEqual([[`/recipes/${recipeId}`], ['/']]);
 });
 
-it('rejects an author’s direct rating request even with a reader’s email in the form', async () => {
+it('rejects an author’s direct rating request even with a reader’s subject in the form', async () => {
   vi.mocked(getSignedInUser).mockResolvedValue(author);
   await rateRecipe(recipeId, ratingForm('5'));
 
-  expect(sql).toHaveBeenCalledWith(expect.any(Array), 5, author.email, recipeId, author.email);
+  expect(sql).toHaveBeenCalledWith(expect.any(Array), 5, author.googleSubject, recipeId, author.googleSubject);
   expect(ratings.size).toBe(0);
   expect(revalidatePath).not.toHaveBeenCalled();
 });

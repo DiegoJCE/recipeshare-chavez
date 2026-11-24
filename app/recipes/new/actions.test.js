@@ -8,14 +8,15 @@ vi.mock('../../../lib/data.js', () => ({ addRecipe: vi.fn() }));
 vi.mock('next/navigation', () => ({ redirect: vi.fn() }));
 
 it.each([
-  [null, 'Guest Cook', null],
-  [{ name: 'Google Cook', email: 'cook@example.com' }, 'Google Cook', 'cook@example.com'],
-])('saves authorship from the session when present (%j)', async (user, authorName, authorEmail) => {
+  [null, 'Guest Cook', null, null],
+  [{ name: 'Google Cook', email: 'cook@example.com', googleSubject: 'google-cook' }, 'Google Cook', 'cook@example.com', 'google-cook'],
+])('saves authorship from the session when present (%j)', async (user, authorName, authorEmail, authorSubject) => {
   vi.mocked(getSignedInUser).mockResolvedValue(user);
   const formData = new FormData();
   for (const [name, value] of Object.entries({
     authorName: 'Guest Cook',
     authorEmail: 'forged@example.com',
+    authorSubject: 'forged-subject',
     title: 'Pasta',
     cuisine: 'Italian',
     category: 'Main Dish',
@@ -29,5 +30,5 @@ it.each([
 
   await createRecipe({ attempt: 0 }, formData);
 
-  expect(addRecipe).toHaveBeenLastCalledWith(expect.objectContaining({ authorName, authorEmail }));
+  expect(addRecipe).toHaveBeenLastCalledWith(expect.objectContaining({ authorName, authorEmail, authorSubject }));
 });

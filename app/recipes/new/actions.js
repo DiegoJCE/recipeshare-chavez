@@ -10,6 +10,6 @@ export async function createRecipe(previousState, formData) {
   const { recipe, state } = await prepareRecipeForm(previousState, formData, user?.name);
   if (state) return state;
 
-  await addRecipe({ ...recipe, authorEmail: user?.email ?? null });
+  await addRecipe({ ...recipe, authorEmail: user?.email ?? null, authorSubject: user?.googleSubject ?? null });
   redirect('/');
 }

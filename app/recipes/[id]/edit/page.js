@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export default async function EditRecipePage({ params }) {
   const { id } = await params;
   const user = await getSignedInUser();
-  const recipe = user && await getOwnedRecipe(id, user.email);
+  const recipe = user && await getOwnedRecipe(id, user.googleSubject);
   if (!recipe) notFound();
 
   const { authorName, title, cuisine, category, ingredients, steps, prepTimeMinutes, imageUrl, dietaryTags } = recipe;

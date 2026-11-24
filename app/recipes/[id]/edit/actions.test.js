@@ -13,18 +13,18 @@ vi.mock('next/navigation', () => ({
 }));
 
 const recipe = sampleRecipes[0];
-const owner = { name: recipe.authorName, email: 'owner@example.com' };
-const otherUser = { name: owner.name, email: 'other@example.com' };
+const owner = { name: recipe.authorName, email: 'owner@example.com', googleSubject: 'google-owner' };
+const otherUser = { name: owner.name, email: owner.email, googleSubject: 'google-other' };
 const sql = vi.fn((parts, ...params) => {
   const query = parts.join('?');
   if (query.includes('SELECT r.id')) {
-    expect(query).toContain('r.author_email = ?');
-    const [, id, , email] = params;
-    return id === recipe.id && email === owner.email ? [recipe] : [];
+    expect(query).toContain('r.author_google_subject = ?');
+    const [, id, , subject] = params;
+    return id === recipe.id && subject === owner.googleSubject ? [recipe] : [];
   } else {
-    expect(query).toContain('WHERE id = ? AND author_email = ?');
+    expect(query).toContain('WHERE id = ? AND author_google_subject = ?');
   }
-  return params.at(-2) === recipe.id && params.at(-1) === owner.email ? [recipe] : [];
+  return params.at(-2) === recipe.id && params.at(-1) === owner.googleSubject ? [recipe] : [];
 });
 
 beforeEach(() => {
@@ -37,7 +37,7 @@ function recipeForm() {
   for (const [field, value] of Object.entries(recipe)) {
     form.set(field, Array.isArray(value) ? value.join('\n') : value);
   }
-  form.set('authorEmail', owner.email);
+  form.set('authorSubject', owner.googleSubject);
   form.set('title', 'Updated recipe');
   return form;
 }
@@ -49,7 +49,7 @@ it.each([null, otherUser])('rejects direct edit and delete requests from %j', as
   await expect(deleteRecipe(recipe.id)).rejects.toThrow('Not found');
   expect(sql.mock.calls.some(([parts]) => parts.join('?').includes('UPDATE recipes'))).toBe(false);
   if (user) {
-    expect(sql).toHaveBeenLastCalledWith(expect.any(Array), recipe.id, user.email);
+    expect(sql).toHaveBeenLastCalledWith(expect.any(Array), recipe.id, user.googleSubject);
   } else {
     expect(sql).not.toHaveBeenCalled();
   }
@@ -62,9 +62,9 @@ it('lets the owner update and delete their recipe', async () => {
   const [parts, title, ...params] = sql.mock.lastCall;
   expect(parts.join('?')).toContain('UPDATE recipes');
   expect(title).toBe('Updated recipe');
-  expect(params.slice(-2)).toEqual([recipe.id, owner.email]);
+  expect(params.slice(-2)).toEqual([recipe.id, owner.googleSubject]);
 
   await expect(deleteRecipe(recipe.id)).rejects.toThrow('Redirect to /');
   expect(sql.mock.lastCall[0].join('?')).toContain('DELETE FROM recipes');
-  expect(sql).toHaveBeenLastCalledWith(expect.any(Array), recipe.id, owner.email);
+  expect(sql).toHaveBeenLastCalledWith(expect.any(Array), recipe.id, owner.googleSubject);
 });

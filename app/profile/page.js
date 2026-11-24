@@ -23,7 +23,7 @@ export default async function ProfilePage() {
     );
   }
 
-  const recipes = await getRecipesByAuthor(user.email);
+  const recipes = await getRecipesByAuthor(user.googleSubject);
 
   return (
     <main>
