@@ -119,3 +119,7 @@
 [  4.7 min] change (0 more queued): update the README feature checklist: S1, S2, S3, S4 done
 [  5.6 min] committed: change: update the README feature checklist: S1, S2, S3, S4 done
 [  5.8 min] review (claude): FAIL -> fixing with codex
+[  7.6 min] committed: fix after review (codex)
+[  7.8 min] review (claude): PASS
+[  7.8 min] pushed to GitHub
+[ 10.8 min] change (0 more queued): data cleanup (no app code changes): write scripts/seed-more.mjs that reads DATABASE_URL from .env.local, then 1) deletes the recipe titled "Nigiri" and its ratings, 2) inserts 9 complete, realistic recipes using the app's existing table structure, skipping any whose title already exists: Japanese Salmon Nigiri (Main Dish), plus one per category: Breakfast, Main Dish, Fast Food, Soup, Salad, Dessert, Snack, Drink, spread across different cuisines from the fixed list (include Iranian and Arabic). Each needs real ingredients with amounts, numbered steps, prep time, a sensible dietary tag, and a working food photo URL from images.unsplash.com (food only, no people) — check each image URL returns 200 with curl before using it. Run the script once, then print the list of recipe titles now in the database. Keep the script in the repo (it must contain no secrets) and mention it in the README.

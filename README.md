@@ -30,6 +30,10 @@ Open [http://localhost:3000](http://localhost:3000). If PowerShell blocks `npm.p
 
 The app creates the database tables on first use and adds two sample recipes when the recipes table is empty.
 
+## Refresh sample recipes
+
+With the database tables already initialized, run `node scripts/seed-more.mjs` from the repository root. The script uses `DATABASE_URL` from `.env.local`, deletes the recipe titled `Nigiri` and its ratings, adds up to nine sample recipes while skipping existing titles, and prints the resulting recipe titles.
+
 ## Tests and build
 
 ```sh
