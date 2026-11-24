@@ -29,3 +29,4 @@ One step at a time, in order. Tick a step off (`- [x]`) only when it works. Must
   - [x] Verify the rating controls locally and test the server rules.
 - [x] 22. Could: Add public recipe comments with Google sign-in required to post, enforce the 500-character limit and plain-text rendering, and verify locally.
 - [x] 23. Could: Let signed-in users add or remove favorites from recipe details and list them on their profile. Test account isolation and verify locally.
+- [x] 24. Could: Add optional YouTube video links to recipe forms and embed them on detail pages. Test validation and persistence, and verify locally.

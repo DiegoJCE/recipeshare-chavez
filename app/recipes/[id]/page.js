@@ -7,6 +7,7 @@ import ServingsScaler from '@/components/ServingsScaler';
 import { getSignedInUser } from '@/auth';
 import { getComments, getOwnedRecipe, getRecipe, isRecipeFavorite } from '@/lib/data';
 import { averageRating } from '@/lib/ratings';
+import { youtubeEmbedUrl } from '@/lib/recipeVideo';
 import { postComment, rateRecipe, updateFavorite } from './actions';
 import { deleteRecipe } from './edit/actions';
 
@@ -25,6 +26,7 @@ export default async function RecipePage({ params }) {
 
   const { title, authorName, cuisine, category, prepTimeMinutes, imageUrl, ingredients, steps, ratings, dietaryTags = [] } = recipe;
   const ratingCount = ratings.length;
+  const videoEmbedUrl = youtubeEmbedUrl(recipe.videoUrl);
 
   return (
     <main className="narrow">
@@ -99,6 +101,19 @@ export default async function RecipePage({ params }) {
                 {steps.map((step, index) => <li key={index}>{step}</li>)}
               </ol>
             </section>
+
+            {videoEmbedUrl && (
+              <section className="recipe-video-section">
+                <h2>Recipe video</h2>
+                <iframe
+                  className="recipe-video"
+                  src={videoEmbedUrl}
+                  title={`Recipe video for ${title}`}
+                  loading="lazy"
+                  allowFullScreen
+                />
+              </section>
+            )}
 
             <section className="recipe-comments">
               <h2>Comments</h2>

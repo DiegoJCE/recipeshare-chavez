@@ -13,7 +13,7 @@ export default async function EditRecipePage({ params }) {
   const recipe = user && await getOwnedRecipe(id, user);
   if (!recipe) notFound();
 
-  const { authorName, title, cuisine, category, ingredients, steps, prepTimeMinutes, imageUrl, dietaryTags } = recipe;
+  const { authorName, title, cuisine, category, ingredients, steps, prepTimeMinutes, imageUrl, dietaryTags, videoUrl } = recipe;
 
   return (
     <main className="narrow">
@@ -27,7 +27,7 @@ export default async function EditRecipePage({ params }) {
           authorName={authorName}
           saveRecipe={editRecipe.bind(null, id)}
           initialValues={{
-            title, cuisine, category, prepTimeMinutes, imageUrl, dietaryTags,
+            title, cuisine, category, prepTimeMinutes, imageUrl, dietaryTags, videoUrl,
             ingredients: ingredients.join('\n'),
             steps: steps.join('\n'),
           }}

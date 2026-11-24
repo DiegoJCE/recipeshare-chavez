@@ -58,6 +58,12 @@ export default function RecipeForm({ authorName, saveRecipe, initialValues = {} 
         <small id="imageFile-help">JPEG, PNG, WebP, or GIF, up to 4 MB. A selected file replaces the image URL.</small>
         {photoError && <span id="imageFile-error" role="alert" className="field-error">{photoError}</span>}
       </div>
+      <RecipeField
+        key={`video-${attempt}`}
+        field={{ name: 'videoUrl', label: 'YouTube video URL (optional)', type: 'url', required: false }}
+        value={values.videoUrl}
+        error={errors.videoUrl}
+      />
       <fieldset key={attempt} className="field-wide dietary-fields">
         <legend className="field-label">Dietary tags (optional)</legend>
         {DIETARY_TAGS.map((tag) => (

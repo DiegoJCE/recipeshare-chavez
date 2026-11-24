@@ -85,7 +85,7 @@ See the [product specification](docs/spec.md) for acceptance criteria.
 | Could | Public recipe comments with Google sign-in to post | Done |
 | Could | Favorites on a profile page | Done |
 | Could | Servings scaler | Done |
-| Could | Embedded recipe video | Not done |
+| Could | Embedded recipe video | Done |
 | Could | Dietary tags and filtering | Done |
 | Could | Phone-friendly layout | Done |
 | Could | Passport-themed fallback for missing or failed recipe photos | Done |

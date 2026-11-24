@@ -691,6 +691,17 @@ textarea:focus {
   margin-top: 2rem;
 }
 
+.recipe-video-section {
+  grid-column: 1 / -1;
+}
+
+.recipe-video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
 .recipe-sections h2 {
   margin: 0 0 0.75rem;
   padding-bottom: 0.4rem;
