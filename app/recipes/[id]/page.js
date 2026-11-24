@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import CommentForm from '@/components/CommentForm';
 import RatingForm from '@/components/RatingForm';
 import RecipePhoto from '@/components/RecipePhoto';
 import ServingsScaler from '@/components/ServingsScaler';
 import { getSignedInUser } from '@/auth';
-import { getOwnedRecipe, getRecipe } from '@/lib/data';
+import { getComments, getOwnedRecipe, getRecipe } from '@/lib/data';
 import { averageRating } from '@/lib/ratings';
-import { rateRecipe } from './actions';
+import { postComment, rateRecipe } from './actions';
 import { deleteRecipe } from './edit/actions';
 
 export const dynamic = 'force-dynamic';
@@ -17,6 +18,7 @@ export default async function RecipePage({ params }) {
   const ownedRecipe = user ? await getOwnedRecipe(id, user) : null;
   const recipe = ownedRecipe ?? await getRecipe(id);
   if (!recipe) notFound();
+  const comments = await getComments(id);
 
   const { title, authorName, cuisine, category, prepTimeMinutes, imageUrl, ingredients, steps, ratings, dietaryTags = [] } = recipe;
   const ratingCount = ratings.length;
@@ -84,6 +86,23 @@ export default async function RecipePage({ params }) {
               <ol className="step-list">
                 {steps.map((step, index) => <li key={index}>{step}</li>)}
               </ol>
+            </section>
+
+            <section className="recipe-comments">
+              <h2>Comments</h2>
+              {comments.length === 0 ? <p>No comments yet.</p> : (
+                <ul className="comment-list" role="list">
+                  {comments.map(({ id, authorName, body }) => (
+                    <li key={id}>
+                      <strong>{authorName}</strong>
+                      <p>{body}</p>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {user ? <CommentForm action={postComment.bind(null, id)} /> : (
+                <Link href="/profile" className="button button-ghost">Sign in to comment</Link>
+              )}
             </section>
           </div>
         </div>

@@ -765,6 +765,30 @@ textarea:focus {
 
 /* ---------- Rating form ---------- */
 
+.recipe-comments {
+  grid-column: 1 / -1;
+}
+
+.comment-list {
+  list-style: none;
+  padding: 0;
+}
+
+.comment-list li {
+  border-bottom: 1px solid var(--line);
+  padding: 0.75rem 0;
+  overflow-wrap: anywhere;
+}
+
+.comment-list p {
+  margin: 0.25rem 0 0;
+  white-space: pre-wrap;
+}
+
+.recipe-comments form button {
+  margin-top: 0.5rem;
+}
+
 .rating-form fieldset {
   margin: 0;
   padding: 1rem 1.25rem 1.25rem;

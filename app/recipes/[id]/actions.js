@@ -2,7 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { getSignedInUser } from '../../../auth.js';
-import { addRating } from '../../../lib/data.js';
+import { addComment, addRating } from '../../../lib/data.js';
+import { COMMENT_MAX_LENGTH, isValidComment } from '../../../lib/comments.js';
 import { isValidRating } from '../../../lib/ratings.js';
 
 export async function rateRecipe(id, formData) {
@@ -16,4 +17,20 @@ export async function rateRecipe(id, formData) {
 
   revalidatePath(`/recipes/${id}`);
   revalidatePath('/');
+}
+
+export async function postComment(id, previousState, formData) {
+  const user = await getSignedInUser();
+  if (!user) return { error: 'Sign in to post a comment.' };
+
+  const body = formData.get('comment');
+  if (!isValidComment(body)) {
+    return { error: `Enter a comment between 1 and ${COMMENT_MAX_LENGTH} characters.` };
+  }
+  if (!(await addComment(id, user.name, body.trim()))) {
+    return { error: 'This recipe is no longer available.' };
+  }
+
+  revalidatePath(`/recipes/${id}`);
+  return { error: '' };
 }
