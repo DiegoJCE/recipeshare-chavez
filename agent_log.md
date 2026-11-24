@@ -113,3 +113,7 @@
 [ 56.3 min] done
 [  0.0 min] edit mode. builder: codex. reviewer: claude sonnet
 [  0.1 min] change (1 more queued): S4: on the add recipe form (and edit form), let the user EITHER paste an image link OR upload an image file, using Vercel Blob (@vercel/blob, env var BLOB_READ_WRITE_TOKEN, add the name to .env.example). The uploaded file's Blob URL is saved as the recipe's image URL. The image link option must keep working exactly as before, and the form must still require one of the two. Food photos only, max 4 MB, images only. npm run build must pass without the token. Add a test for the "link or upload required" validation and run all tests.
+[  4.4 min] committed: change: S4: on the add recipe form (and edit form), let the user EIT
+[  4.7 min] review (claude): PASS
+[  4.7 min] pushed to GitHub
+[  4.7 min] change (0 more queued): update the README feature checklist: S1, S2, S3, S4 done

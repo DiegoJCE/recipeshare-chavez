@@ -1,23 +1,10 @@
 VERDICT: PASS
 
-I read the diff and the surrounding code (`auth.js`, `page.js`, `docs/spec.md`). I did not run the tests or the build. `SPEC.md` doesn't exist, so I used `docs/spec.md`. I found no crash or functional bug that contradicts S3. The server enforces all three S3 rules:
-- **Sign-in:** `rateRecipe` returns early when `getSignedInUser()` is null, before it touches the database.
-- **One rating per user:** the `ON CONFLICT (recipe_id, rater_email) DO UPDATE` clause replaces the user's earlier rating.
-- **No self-rating:** `author_email IS DISTINCT FROM ${raterEmail}` blocks authors, and also lets through recipes that have no `author_email`.
+I read the diff and `docs/spec.md`. `SPEC.md` doesn't exist, so I used `docs/spec.md`. I didn't run the tests or the build. I found no crash or spec contradiction. S4 ("upload an image file, and it still shows after redeploying") is met by storing the photo in Vercel Blob and saving its public URL.
 
-Concerns, none blocking:
-- **README marks S3 "Done" without a deployed check.**
-  - Spec §3 and the previous review say a feature is done only when it passes on the deployed app.
-  - `docs/plan.md` step 21 is ticked on local verification alone, and nothing shows the `ALTER TABLE` and unique-index migration ran against the live Neon database.
-  - S1 and S2 are still "Partly done" for the same reason.
-  - Mark S3 "Partly done" until it is checked live.
-- **The tests don't exercise the replace-rating rule.**
-  - `actions.test.js` mocks `sql` and re-implements the replace and self-rating logic in the mock. It only checks that the query text contains `ON CONFLICT` and `IS DISTINCT FROM`.
-  - The old `addRating` tests were deleted, so the real SQL has no coverage.
-  - This is acceptable for a no-database test setup, but the rules are not truly tested.
-- **No one can rate when Google sign-in isn't configured.**
-  - `getSignedInUser()` returns null when the `AUTH_*` environment variables are missing, so every visitor sees "Sign in to rate".
-  - That follows S3. It does conflict with the S1 and M5 wording that visitors can rate without an account, but S3 supersedes it.
-- **The "Sign in to rate" button links to `/profile`.** I didn't check that this route starts the sign-in flow. If it only shows a page, the link is a minor UX issue.
-- **Emails are compared case-sensitively.** `author_email` and `rater_email` are plain text, so a case difference could let an author rate their own recipe. Google emails are normally consistent, so this is unlikely.
-- **Old ratings have no `rater_email`.** They stay counted in averages and are never replaced. Because `NULL` values are distinct in a unique index, the new index won't fail on them.
+Minor problems, none blocking:
+- **Blob token is unverified.** `BLOB_READ_WRITE_TOKEN` is only listed in `.env.example`. Until a Blob store is connected to the Vercel project, every upload fails with the inline "could not be uploaded" error. Spec §3 says a feature counts as done only when it passes on the deployed app, so S4 shouldn't be ticked until that's checked live.
+- **The chosen file is lost after a server-side error.** The photo input is keyed on `attempt`, so a failed upload or validation remounts it and empties it. The user has to pick the file again. The pasted URL is kept.
+- **Orphaned blobs.** Editing a recipe and uploading a new photo, or deleting a recipe, leaves the old blob in storage. This is a storage leak, not a functional bug.
+- **Oversized files can fail without an inline error.** The client check stops files over 4 MB. A request that gets past it but exceeds the 4.5 MB `bodySizeLimit` makes the server action throw. The limit also sits close to Vercel's own request-body cap. Both are edge cases.
+- **Commit message.** It is garbled ("let the user EIT"), a cosmetic problem.

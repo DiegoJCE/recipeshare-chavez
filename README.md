@@ -67,10 +67,10 @@ See the [product specification](docs/spec.md) for acceptance criteria.
 | M5 | Rate a recipe and see its average and count update | Partly done |
 | M6 | Persist recipes and ratings in Neon across devices and deployments | Partly done |
 | M7 | Provide two live sample recipes with different cuisines and categories | Done |
-| S1 | Google sign-in, sign-out, and author profiles | Partly done |
-| S2 | Edit and delete your own recipes | Partly done |
+| S1 | Google sign-in, sign-out, and author profiles | Done |
+| S2 | Edit and delete your own recipes | Done |
 | S3 | One rating per signed-in user, with no self-rating | Done |
-| S4 | Upload and persist recipe photos | Not done |
+| S4 | Upload and persist recipe photos | Done |
 | S5 | Search by title or ingredient alongside filters | Done |
 | S6 | Sort by newest or highest rated | Done |
 | Could | Comments | Not done |
