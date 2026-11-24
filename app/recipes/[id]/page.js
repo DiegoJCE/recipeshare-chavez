@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RatingForm from '@/components/RatingForm';
+import RecipePhoto from '@/components/RecipePhoto';
 import ServingsScaler from '@/components/ServingsScaler';
 import { getRecipe } from '@/lib/data';
 import { averageRating } from '@/lib/ratings';
@@ -21,7 +22,7 @@ export default async function RecipePage({ params }) {
       <Link href="/" className="back-link">← All recipes</Link>
       <article className="recipe-detail">
         <div className="recipe-detail-photo">
-          <img src={imageUrl} alt={title} />
+          <RecipePhoto key={imageUrl} imageUrl={imageUrl} title={title} />
           <span className="stamp">{cuisine}</span>
         </div>
 

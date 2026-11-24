@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { averageRating } from '@/lib/ratings';
+import RecipePhoto from './RecipePhoto';
 
 export default function RecipeCard({ recipe }) {
   const { id, title, imageUrl, cuisine, category, ratings, dietaryTags = [] } = recipe;
@@ -9,7 +10,7 @@ export default function RecipeCard({ recipe }) {
     <article className="recipe-card">
       <Link href={`/recipes/${id}`} className="recipe-card-link">
         <div className="recipe-card-photo">
-          <img src={imageUrl} alt={title} />
+          <RecipePhoto key={imageUrl} imageUrl={imageUrl} title={title} />
           <span className="stamp">{cuisine}</span>
         </div>
         <div className="recipe-card-content">

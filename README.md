@@ -73,7 +73,7 @@ See the [product specification](docs/spec.md) for acceptance criteria. For Must 
 | Could | Embedded recipe video | Not done |
 | Could | Dietary tags and filtering | Done |
 | Could | Phone-friendly layout | Done |
-| Could | Additional ideas | Not done |
+| Could | Passport-stamp placeholder for unavailable photos on cards and recipe details | Done |
 
 Live checks still open are submitting valid and incomplete recipes (M3), submitting a rating and confirming the updated average and count (M5), and checking that new data persists across devices and a redeploy (M6).
 

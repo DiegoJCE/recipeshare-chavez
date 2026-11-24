@@ -1,27 +1,14 @@
-VERDICT: FAIL
+VERDICT: PASS
 
-I read the diff and the spec. I didn't run `npm test` or `npm run build`, because the shell asked for approval on a compound command and I made no further attempt. The failures are about process and scope. I found no crash in the code.
+I read the diff and `docs/spec.md`. There is no `SPEC.md`. I didn't run the tests or the build, so I found no crash from reading alone.
 
-1. **`docs/spec.md` was edited.** CLAUDE.md says the spec is the source of truth and must not be changed. This commit rewrites S4, the Could-have section and the "Constraints" image rule. S4 now requires JPEG/PNG/WebP up to 3 MB on Vercel Blob. "Images are links only" is replaced by "URL or Blob upload". That changes the requirements to match what was built.
+- **Spec:** The commit puts `docs/spec.md` back to its original text, which fixes the earlier FAIL for editing it. S4, the Could section and the image constraint match the original again. It also removes the Blob upload code, which would have broken the "images are links only" rule and M3's "image link (URL)" field.
+- **M3:** `imageUrl` is `required` again in the form, and `validateRecipe` always checks the URL. An empty required field saves nothing and shows the error on that field.
+- **Removed upload code:** I found no leftover imports. `lib/photo.js`, its test, the `@vercel/blob` dependency, the `next.config` body-size override and `BLOB_READ_WRITE_TOKEN` are all gone together, and the README lists S4 as "Not done".
+- **Sorting:** `sortRecipes` now sorts by the DB `position` column, which `getRecipes` selects. It no longer relies on array order. `lib/db.js` creates `position` as an identity column, so "Newest" is correct.
 
-2. **The commit doesn't match its message or the plan.**
-   - The message says "S5: keyword search".
-   - The commit also contains S6 sorting, the servings scaler, dietary tags with a DB migration, and the S4 Blob upload with a new `@vercel/blob` dependency.
-   - The plan breaks these into steps 14–18, and CLAUDE.md says to do one step at a time.
-   - Step 18 (S4) is still unticked in `docs/plan.md`, but its code is already in this commit.
-   - The new `BLOB_READ_WRITE_TOKEN` env var is only partly handled: it's in `.env.example` and the README, but nothing guards a missing token.
-
-3. **M3 is weakened.**
-   - The spec requires an image link on the form.
-   - `RecipeForm.js` now drops the HTML `required` attribute from `imageUrl`, and `validate.js` skips the URL check when a photo is attached.
-   - Without a photo, the server still rejects a missing URL, so the behaviour is defensible.
-   - It only fits S4's "or upload" wording, and S4 isn't verified.
-
-4. **Minor issues.**
-   - `DIETARY_TAGS` isn't frozen like the other constants in `lib/constants.js`.
-   - The `dietaryTag` filter is a Could-have extension, and its filtering is tested in `filter.test.js` only if that file covers it.
-   - `sortRecipes` assumes `getRecipes` returns oldest first. Any change to the data module's ordering would silently break "Newest".
-
-The S5 filter logic itself is correct. It matches title or any ingredient, case-insensitively, and combines with cuisine and category. `averageRating` returns 0 for unrated recipes, so the highest-rated sort doesn't crash.
-
-Fixing this means reverting the `docs/spec.md` edits and splitting the commit by plan step.
+Minor problems, none blocking:
+1. `sortRecipes` assumes every recipe has a `position`. If one is missing, `Number(undefined)` is NaN and the order becomes undefined. The only data path today is the DB, so this can't happen yet. A fallback to input order would be safer.
+2. The sort test now passes the recipes in a shuffled order. That is good, but it only covers the `position` case.
+3. The servings scaler, dietary tags and the `dietaryTag` filter are still in the code, though the spec edits describing them were reverted. They are Could features and the spec's Could list covers them. If M1–M7 aren't verified live, they are still ahead of the "Must first" rule. The README should say they are covered by the Could list.
+4. `REVIEW.md` and `agent_log.md` are in the commit or modified. This is process noise, not a bug.

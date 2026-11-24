@@ -445,13 +445,18 @@ textarea:focus {
   position: relative;
 }
 
-.recipe-card img {
-  display: block;
+.recipe-card-photo img,
+.recipe-card-photo .recipe-photo-placeholder {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   border-radius: calc(var(--radius) - 0.35rem);
-  background: var(--paper);
+  background-color: var(--paper);
+}
+
+.recipe-card-photo img,
+.recipe-detail-photo img {
+  display: block;
 }
 
 .recipe-card .stamp {
@@ -578,12 +583,38 @@ textarea:focus {
   position: relative;
 }
 
-.recipe-detail-photo img {
-  display: block;
+.recipe-detail-photo img,
+.recipe-detail-photo .recipe-photo-placeholder {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
+  background-color: var(--paper);
+}
+
+.recipe-photo-placeholder {
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background-image: repeating-linear-gradient(
+    -35deg,
+    transparent 0 12px,
+    rgb(31 42 68 / 6%) 12px 13px,
+    transparent 13px 24px
+  );
+}
+
+.recipe-photo-stamp {
+  padding: 0.45rem 0.75rem;
+  border: 4px double var(--navy);
+  border-radius: 0.35rem;
   background: var(--paper);
+  color: var(--navy);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-8deg);
 }
 
 .recipe-detail-photo .stamp {
