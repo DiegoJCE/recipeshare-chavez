@@ -73,7 +73,8 @@ export default async function RecipePage({ params }) {
             </div>
           </dl>
 
-          <RatingForm action={rateRecipe.bind(null, id)} />
+          {!user && <Link href="/profile" className="button button-ghost">Sign in to rate</Link>}
+          {user && !ownedRecipe && <RatingForm action={rateRecipe.bind(null, id)} />}
 
           <div className="recipe-sections">
             <ServingsScaler ingredients={ingredients} />

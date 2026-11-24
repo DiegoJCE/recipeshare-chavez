@@ -24,3 +24,4 @@ One step at a time, in order. Tick a step off (`- [x]`) only when it works. Must
   - [x] Verify the footer links to the privacy notice locally and test how it describes Google's name and email data.
 - [ ] 20. S2: Add owner-only edit and delete controls, enforce ownership on the server, and verify on the deployed app.
   - [x] Verify locally with app smoke checks and server-action tests.
+- [x] 21. S3: Require sign-in for ratings, replace each user's previous rating, and block authors from rating their own recipes. Verify the rating controls locally and test the server rules.

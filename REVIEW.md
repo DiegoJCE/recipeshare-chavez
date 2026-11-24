@@ -1,11 +1,12 @@
-VERDICT: FAIL
+VERDICT: PASS
 
-This commit only changes `README.md`, `REVIEW.md` and `agent_log.md`. There are no code crashes. I read `docs/spec.md` because there is no `SPEC.md`. I didn't run the tests or the build.
+This commit only touches `README.md`, `REVIEW.md`, `docs/plan.md` and `agent_log.md`, so it can't crash anything. I read `docs/spec.md` (there is no `SPEC.md`) but didn't run the tests or the build.
 
-- **Unverified "Done" statuses:** the README marks M3, M5, M6 and S1 as Done. The previous README listed them as "Partly done" because the live acceptance checks were still open. Nothing in this commit, `agent_log.md` or `docs/plan.md` shows those checks were run. Spec §3 says a feature is done only when its criterion passes on the deployed app.
-- **Contradicts the plan:** `docs/plan.md` step 19 (S1) is still unticked, with "Verify the signed-in flow on the deployed app" outstanding. The README now says S1 is Done. Step 20 (S2) was ticked on the basis of local smoke checks and server-action tests, not a deployed check. S2 is also marked Done.
-- **Deleted the open-checks note:** the commit removed the sentence "Live checks still open are submitting valid and incomplete recipes (M3), submitting a rating… (M5), … persist… (M6)". It also removed the "Partly done" legend. E7 asks for honest done / partly done / not done statuses, and this removes the evidence of what's unverified.
-- **"Additional ideas: Done" has no content:** spec §5 says your own ideas must be described in the README. No ideas are described anywhere in the README. This was already the case before the commit and was not fixed.
-- **Minor:** the README opens with "Live app on Vercel [url](url)", which repeats the URL as both the text and the target. This is cosmetic.
+The commit fixes the problems the previous review raised. M3, M5, M6, S1 and S2 are back to "Partly done", the legend is restored, and a list of open deployed checks was added. Step 20 in `docs/plan.md` is unticked again with a local-verification sub-item. This matches spec §3 ("done only when it passes on the deployed app") and E7.
 
-To fix this, run the deployed checks for M3, M5, M6 and S1 and record that they passed. Otherwise restore "Partly done" for those four items and for S2.
+Minor issues, none blocking:
+- **Unverified "Done" statuses:** M1, M2, M4, M7, S5, S6 and the Could items are still marked "Done". Nothing in the commit shows they were checked on the deployed app, while M3, M5 and M6 are held back for the same reason. This is inconsistent, but the previous review didn't flag these and M4, M7 and S5 are probably fine.
+- **Spec §5 "your own ideas":** the "Additional ideas" row became "Passport-themed fallback for missing or failed recipe photos". That is now described, which is fine. The only item in this category is a photo fallback, so it is a thin "idea".
+- **Plan vs. README:** S4 (step 18) and S1 (step 19) are unticked, and the README matches. S3 is "Not done" and S1 is not fully verified. The spec says S1 must be done before S3, so keep S3 off until S1's deployed checks pass.
+- **`REVIEW.md` is committed:** it holds the previous review's FAIL verdict. It is stale after this fix and is noise in the repo history. It is also a review artifact, not project content.
+- **`agent_log.md`:** it has an uncommitted working-tree change, so the log is out of sync with the repo. This is cosmetic.

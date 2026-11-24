@@ -69,7 +69,7 @@ See the [product specification](docs/spec.md) for acceptance criteria.
 | M7 | Provide two live sample recipes with different cuisines and categories | Done |
 | S1 | Google sign-in, sign-out, and author profiles | Partly done |
 | S2 | Edit and delete your own recipes | Partly done |
-| S3 | One rating per signed-in user, with no self-rating | Not done |
+| S3 | One rating per signed-in user, with no self-rating | Done |
 | S4 | Upload and persist recipe photos | Not done |
 | S5 | Search by title or ingredient alongside filters | Done |
 | S6 | Sort by newest or highest rated | Done |

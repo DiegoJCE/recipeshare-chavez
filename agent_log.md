@@ -102,3 +102,7 @@
 [ 48.8 min] change (0 more queued): update the README: live URL https://recipeshare-chavez.vercel.app, how to run and test, and the feature checklist (M1-M7, S1, S2, S5, S6 done; S3, S4 not done; Could: servings scaler, dietary tags done)
 [ 49.9 min] committed: change: update the README: live URL https://recipeshare-chavez.verce
 [ 50.1 min] review (claude): FAIL -> fixing with codex
+[ 51.3 min] committed: fix after review (codex)
+[ 51.6 min] review (claude): PASS
+[ 51.6 min] pushed to GitHub
+[ 53.1 min] change (0 more queued): S3: fair ratings. Only signed-in users can rate (visitors see "Sign in to rate" instead of the stars), one rating per user per recipe (rating again replaces their old rating), and authors cannot rate their own recipes. Enforce all three on the server too, not just in the UI. Average rating and rating count still update on the card and detail page. Add a test for the replace-rating and no-self-rating rules and run all tests.
