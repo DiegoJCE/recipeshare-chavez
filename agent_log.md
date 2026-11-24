@@ -73,3 +73,5 @@
 [ 14.0 min] done
 [  0.0 min] edit mode. builder: codex. reviewer: claude sonnet
 [ 22.6 min] change: if an image link fails to load, show a styled placeholder (passport-themed) instead of a broken image, on cards and the detail page make sure there are tests for keyword search, sorting, and the dietary tag filter; add any that are missing and run all tests update the README feature checklist to match what's done
+[ 25.7 min] committed: change: if an image link fails to load, show a styled plac
+[ 26.0 min] review (claude): FAIL -> fixing with codex

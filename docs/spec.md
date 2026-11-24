@@ -29,8 +29,6 @@ A feature is done only when its acceptance criterion passes on the deployed app.
 | M6 | As a visitor, I want recipes and ratings to be saved so that everyone sees the same data. | Data is stored in a database. A recipe added on one computer appears on another, and it is still there after redeploying. |
 | M7 | As the instructor, I want sample data in the live app so that I can test it. | The live app already has at least 2 recipes, each with a different cuisine and category, so the filters can be checked. |
 
-When a recipe photo link fails to load, the recipe card and detail page show a passport-themed “Photo unavailable” placeholder in the photo area.
-
 ## 4. Should have features
 
 S1 must be done before S2 and S3.
