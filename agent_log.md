@@ -96,3 +96,7 @@
 [  5.1 min] review (claude): PASS
 [  5.2 min] pushed to GitHub
 [ 44.9 min] change (1 more queued): S2: signed-in users can edit and delete their OWN recipes (edit/delete buttons only on their recipes), and the server must reject edit/delete requests for recipes they don't own, even if sent directly. add a test for the ownership check and run all tests
+[ 48.5 min] committed: change: S2: signed-in users can edit and delete their OWN recipes (e
+[ 48.8 min] review (claude): PASS
+[ 48.8 min] pushed to GitHub
+[ 48.8 min] change (0 more queued): update the README: live URL https://recipeshare-chavez.vercel.app, how to run and test, and the feature checklist (M1-M7, S1, S2, S5, S6 done; S3, S4 not done; Could: servings scaler, dietary tags done)

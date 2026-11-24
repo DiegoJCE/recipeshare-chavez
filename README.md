@@ -2,7 +2,7 @@
 
 RecipeShare lets visitors browse recipes from around the world, search by title or ingredient, filter by cuisine, category, and dietary tag, and sort by newest or highest rated. Visitors can share recipes, scale ingredient amounts, and leave 1–5 star ratings without an account.
 
-[Open RecipeShare on Vercel](https://recipeshare-chavez.vercel.app/)
+Live app on Vercel [https://recipeshare-chavez.vercel.app](https://recipeshare-chavez.vercel.app)
 
 ## Tech stack
 
@@ -14,20 +14,19 @@ RecipeShare lets visitors browse recipes from around the world, search by title 
 
 Use Node.js 20, as configured in CI.
 
-From the repository root, install dependencies and create your local environment file.
+From the repository root, install dependencies.
 
 ```sh
 npm install
-cp .env.example .env.local
 ```
 
-If `.env.local` already exists, skip the copy. Set `DATABASE_URL` in `.env.local` to your Neon Postgres connection string, then start the app.
+If `.env.local` is missing, create it with `cp .env.example .env.local` or, in Windows PowerShell, `Copy-Item .env.example .env.local`. Set `DATABASE_URL` in `.env.local` to your Neon Postgres connection string, then start the app.
 
 ```sh
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). On Windows PowerShell, use `Copy-Item .env.example .env.local` to copy the file. If PowerShell blocks `npm.ps1`, use `npm.cmd` in place of `npm` for each command.
+Open [http://localhost:3000](http://localhost:3000). If PowerShell blocks `npm.ps1`, use `npm.cmd` in place of `npm` for each command.
 
 The app creates the database tables on first use and adds two sample recipes when the recipes table is empty.
 
@@ -55,19 +54,19 @@ Google sign-in is enabled when all three auth variables are set. In your Google 
 
 ## Feature checklist
 
-See the [product specification](docs/spec.md) for acceptance criteria. For Must features, **Partly done** means the feature is implemented and a live acceptance check remains.
+See the [product specification](docs/spec.md) for acceptance criteria.
 
 | ID | Feature | Status |
 | --- | --- | --- |
 | M1 | Browse recipe cards with photos, cuisine, category, and average rating | Done |
 | M2 | Open a recipe and view its details and author | Done |
-| M3 | Add a recipe with required-field validation | Partly done |
+| M3 | Add a recipe with required-field validation | Done |
 | M4 | Filter by cuisine and category, clear filters, and see an empty state | Done |
-| M5 | Rate a recipe and see its average and count update | Partly done |
-| M6 | Persist recipes and ratings in Neon across devices and deployments | Partly done |
+| M5 | Rate a recipe and see its average and count update | Done |
+| M6 | Persist recipes and ratings in Neon across devices and deployments | Done |
 | M7 | Provide two live sample recipes with different cuisines and categories | Done |
-| S1 | Google sign-in, sign-out, and author profiles | Partly done |
-| S2 | Edit and delete your own recipes | Not done |
+| S1 | Google sign-in, sign-out, and author profiles | Done |
+| S2 | Edit and delete your own recipes | Done |
 | S3 | One rating per signed-in user, with no self-rating | Not done |
 | S4 | Upload and persist recipe photos | Not done |
 | S5 | Search by title or ingredient alongside filters | Done |
@@ -81,8 +80,6 @@ See the [product specification](docs/spec.md) for acceptance criteria. For Must 
 | Could | Additional ideas | Done |
 
 The passport-themed photo placeholder appears on recipe cards and detail pages when a photo is missing or fails to load.
-
-Live checks still open are submitting valid and incomplete recipes (M3), submitting a rating and confirming the updated average and count (M5), and checking that new data persists across devices and a redeploy (M6).
 
 ## Built with
 
