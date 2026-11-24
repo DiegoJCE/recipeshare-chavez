@@ -8,7 +8,7 @@ export default function NewRecipePage() {
       <section className="hero">
         <p className="eyebrow">Share a dish</p>
         <h1>Add recipe</h1>
-        <p className="lede">Put one ingredient or step on each line. Include a photo by URL or file upload.</p>
+        <p className="lede">Put one ingredient or step on each line and include an image URL.</p>
       </section>
       <div className="form-card">
         <RecipeForm />

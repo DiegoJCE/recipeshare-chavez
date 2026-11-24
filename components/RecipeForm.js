@@ -16,7 +16,7 @@ const fields = [
 ];
 
 export default function RecipeForm() {
-  const [{ values, errors, attempt, hadPhoto }, action, pending] = useActionState(createRecipe, {
+  const [{ values, errors, attempt }, action, pending] = useActionState(createRecipe, {
     values: {},
     errors: {},
     attempt: 0,
@@ -27,13 +27,6 @@ export default function RecipeForm() {
       {fields.map((field) => (
         <RecipeField key={`${field.name}-${attempt}`} field={field} value={values[field.name]} error={errors[field.name]} />
       ))}
-      <div className="field field-wide" key={`photo-${attempt}`}>
-        <label htmlFor="photo" className="field-label">Or upload a photo</label>
-        <input id="photo" name="photo" type="file" accept="image/jpeg,image/png,image/webp"
-          aria-invalid={errors.photo ? true : undefined} aria-describedby="photo-help" />
-        <small id="photo-help">JPEG, PNG, or WebP, up to 3 MB. {hadPhoto && 'Choose the file again before retrying.'}</small>
-        {errors.photo && <span role="alert" className="field-error">{errors.photo}</span>}
-      </div>
       <fieldset key={attempt} className="field-wide dietary-fields">
         <legend className="field-label">Dietary tags (optional)</legend>
         {DIETARY_TAGS.map((tag) => (
@@ -56,7 +49,7 @@ function RecipeField({ field, value, error }) {
   const props = {
     id: name,
     name,
-    required: name !== 'imageUrl',
+    required: true,
     defaultValue: value ?? '',
     'aria-invalid': error ? true : undefined,
     'aria-describedby': error ? errorId : undefined,

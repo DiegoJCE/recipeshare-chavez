@@ -1,15 +1,27 @@
-VERDICT: PASS
+VERDICT: FAIL
 
-I read the diff and `docs/spec.md`. There is no `SPEC.md`. I didn't run the tests or the build. The commit adds a README and a README test, and changes no app code, so I found no crash risk.
+I read the diff and the spec. I didn't run `npm test` or `npm run build`, because the shell asked for approval on a compound command and I made no further attempt. The failures are about process and scope. I found no crash in the code.
 
-README against spec E7 and E6:
-- **E7:** The README has the live URL, how to run the app and the tests, and a checklist of the M, S and Could features with a status for each.
-- **E6:** Only the name `DATABASE_URL` is listed. `.env.example` also holds just the name.
-- **Commands:** `npm test` and `npm run build` match the commands in `CLAUDE.md`. Node 20 matches `.github/workflows/ci.yml`.
+1. **`docs/spec.md` was edited.** CLAUDE.md says the spec is the source of truth and must not be changed. This commit rewrites S4, the Could-have section and the "Constraints" image rule. S4 now requires JPEG/PNG/WebP up to 3 MB on Vercel Blob. "Images are links only" is replaced by "URL or Blob upload". That changes the requirements to match what was built.
 
-Minor points that don't block:
-1. **Status marks M3, M5 and M6 as "Partly done".** The spec says a feature is done only when it passes on the deployed app. The README says the live checks are still open, which fits that rule. It is the honest status, but those three items still need a live check.
-2. **Live URL:** `https://recipeshare-chavez.vercel.app/` is not stated anywhere else in the repo. I can't verify it is the real production URL. If it's wrong, the README has a dead link and the URL test would still pass.
-3. **`lib/readme.test.js` is weak.** It only checks that the Vercel URL pattern and the M1–M7 rows exist. It reads `README.md` through `import.meta.url`, which is fine in Vitest. It would not notice a wrong URL or a wrong status.
-4. **Could-feature statuses:** "Phone-friendly layout: Done" is claimed before plan step 13, the design pass, which is still unticked in this commit. Mobile layout may not have been verified. The README doesn't say where "Phone-friendly layout" comes from either.
-5. **Process:** `REVIEW.md` is rewritten with the review of the previous commit (`8356d6b`), not this one. `agent_log.md` also shows as modified in the working tree.
+2. **The commit doesn't match its message or the plan.**
+   - The message says "S5: keyword search".
+   - The commit also contains S6 sorting, the servings scaler, dietary tags with a DB migration, and the S4 Blob upload with a new `@vercel/blob` dependency.
+   - The plan breaks these into steps 14–18, and CLAUDE.md says to do one step at a time.
+   - Step 18 (S4) is still unticked in `docs/plan.md`, but its code is already in this commit.
+   - The new `BLOB_READ_WRITE_TOKEN` env var is only partly handled: it's in `.env.example` and the README, but nothing guards a missing token.
+
+3. **M3 is weakened.**
+   - The spec requires an image link on the form.
+   - `RecipeForm.js` now drops the HTML `required` attribute from `imageUrl`, and `validate.js` skips the URL check when a photo is attached.
+   - Without a photo, the server still rejects a missing URL, so the behaviour is defensible.
+   - It only fits S4's "or upload" wording, and S4 isn't verified.
+
+4. **Minor issues.**
+   - `DIETARY_TAGS` isn't frozen like the other constants in `lib/constants.js`.
+   - The `dietaryTag` filter is a Could-have extension, and its filtering is tested in `filter.test.js` only if that file covers it.
+   - `sortRecipes` assumes `getRecipes` returns oldest first. Any change to the data module's ordering would silently break "Newest".
+
+The S5 filter logic itself is correct. It matches title or any ingredient, case-insensitively, and combines with cuisine and category. `averageRating` returns 0 for unrated recipes, so the highest-rated sort doesn't crash.
+
+Fixing this means reverting the `docs/spec.md` edits and splitting the commit by plan step.

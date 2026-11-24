@@ -65,3 +65,5 @@
 [ 32.5 min] done. To change things later: python orchestrate.py --edit
 [  0.0 min] edit mode. builder: codex. reviewer: claude sonnet
 [  2.2 min] change: S5: keyword search box that matches title or ingredients and combines with the cuisine/category filters. add a test, run all tests. S6: sort dropdown on the home page with "Newest" and "Highest rated". add a test, run all tests. Could: servings scaler on the detail page that scales ingredient amounts. add a test. Could: dietary tags (vegetarian, vegan, gluten-free, spicy) on the add form, shown on cards, usable as a filter. add a test. update the README feature checklist to match what's done. S4 photo upload (3 pts) with Vercel Blob. It's medium effort, so do it last if you have time.
+[  8.9 min] committed: change: S5: keyword search box that matches title or ingre
+[  9.3 min] review (claude): FAIL -> fixing with codex
