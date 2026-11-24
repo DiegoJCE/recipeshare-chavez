@@ -88,3 +88,7 @@
 [ 53.5 min] done
 [  0.0 min] edit mode. builder: codex. reviewer: claude sonnet
 [  0.1 min] change (1 more queued): finish the Google sign-in (S1) that was started in the last commit: Auth.js (next-auth v5) with AUTH_SECRET, AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET; sign in/out button in the header; signed-in user's name is the author of new recipes; /profile page listing their recipes; visitors not signed in can still browse, filter, add, and rate as before; npm run build passes without auth env vars; add a test and run all tests
+[  2.7 min] committed: change: finish the Google sign-in (S1) that was started in the last 
+[  3.1 min] review (claude): PASS
+[  3.1 min] pushed to GitHub
+[  3.1 min] change (0 more queued): add a simple /privacy page (linked in the footer) saying RecipeShare stores only your Google name and email to show you as a recipe author, and does not share data
