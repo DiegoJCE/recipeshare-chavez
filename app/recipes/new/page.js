@@ -11,7 +11,7 @@ export default async function NewRecipePage() {
       <section className="hero">
         <p className="eyebrow">Share a dish</p>
         <h1>Add recipe</h1>
-        <p className="lede">Put one ingredient or step on each line and include an image URL.</p>
+        <p className="lede">Put one ingredient or step on each line. Add an image URL or upload a food photo.</p>
       </section>
       <div className="form-card">
         <RecipeForm authorName={user?.name} saveRecipe={createRecipe} />

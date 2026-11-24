@@ -2,18 +2,14 @@
 
 import { redirect } from 'next/navigation';
 import { addRecipe } from '../../../lib/data.js';
-import { readRecipeForm, normalizeRecipeForm } from '../../../lib/recipeForm.js';
-import { validateRecipe } from '../../../lib/validate.js';
+import { prepareRecipeForm } from '../../../lib/prepareRecipeForm.js';
 import { getSignedInUser } from '../../../auth.js';
 
 export async function createRecipe(previousState, formData) {
   const user = await getSignedInUser();
-  const values = readRecipeForm(formData, user?.name);
-  const errors = validateRecipe(values);
-  if (Object.keys(errors).length) {
-    return { values, errors, attempt: previousState.attempt + 1 };
-  }
+  const { recipe, state } = await prepareRecipeForm(previousState, formData, user?.name);
+  if (state) return state;
 
-  await addRecipe({ ...normalizeRecipeForm(values), authorEmail: user?.email ?? null });
+  await addRecipe({ ...recipe, authorEmail: user?.email ?? null });
   redirect('/');
 }

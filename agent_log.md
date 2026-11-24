@@ -106,3 +106,10 @@
 [ 51.6 min] review (claude): PASS
 [ 51.6 min] pushed to GitHub
 [ 53.1 min] change (0 more queued): S3: fair ratings. Only signed-in users can rate (visitors see "Sign in to rate" instead of the stars), one rating per user per recipe (rating again replaces their old rating), and authors cannot rate their own recipes. Enforce all three on the server too, not just in the UI. Average rating and rating count still update on the card and detail page. Add a test for the replace-rating and no-self-rating rules and run all tests.
+[ 55.9 min] committed: change: S3: fair ratings. Only signed-in users can rate (visitors se
+[ 56.2 min] review (claude): PASS
+[ 56.3 min] pushed to GitHub
+[ 56.3 min] pushed to GitHub
+[ 56.3 min] done
+[  0.0 min] edit mode. builder: codex. reviewer: claude sonnet
+[  0.1 min] change (1 more queued): S4: on the add recipe form (and edit form), let the user EITHER paste an image link OR upload an image file, using Vercel Blob (@vercel/blob, env var BLOB_READ_WRITE_TOKEN, add the name to .env.example). The uploaded file's Blob URL is saved as the recipe's image URL. The image link option must keep working exactly as before, and the form must still require one of the two. Food photos only, max 4 MB, images only. npm run build must pass without the token. Add a test for the "link or upload required" validation and run all tests.

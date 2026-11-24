@@ -4,21 +4,17 @@ import { revalidatePath } from 'next/cache';
 import { notFound, redirect } from 'next/navigation';
 import { getSignedInUser } from '../../../../auth.js';
 import { deleteOwnedRecipe, getOwnedRecipe, updateOwnedRecipe } from '../../../../lib/data.js';
-import { normalizeRecipeForm, readRecipeForm } from '../../../../lib/recipeForm.js';
-import { validateRecipe } from '../../../../lib/validate.js';
+import { prepareRecipeForm } from '../../../../lib/prepareRecipeForm.js';
 
 export async function editRecipe(id, previousState, formData) {
   const user = await getSignedInUser();
   const recipe = user && await getOwnedRecipe(id, user.email);
   if (!recipe) notFound();
 
-  const values = readRecipeForm(formData, recipe.authorName);
-  const errors = validateRecipe(values);
-  if (Object.keys(errors).length) {
-    return { values, errors, attempt: previousState.attempt + 1 };
-  }
+  const { recipe: updatedRecipe, state } = await prepareRecipeForm(previousState, formData, recipe.authorName);
+  if (state) return state;
 
-  if (!(await updateOwnedRecipe(id, user.email, normalizeRecipeForm(values)))) notFound();
+  if (!(await updateOwnedRecipe(id, user.email, updatedRecipe))) notFound();
   refreshRecipePages(id);
   redirect(`/recipes/${id}`);
 }
