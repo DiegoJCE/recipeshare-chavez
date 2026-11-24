@@ -3,15 +3,19 @@ import { notFound } from 'next/navigation';
 import RatingForm from '@/components/RatingForm';
 import RecipePhoto from '@/components/RecipePhoto';
 import ServingsScaler from '@/components/ServingsScaler';
-import { getRecipe } from '@/lib/data';
+import { getSignedInUser } from '@/auth';
+import { getOwnedRecipe, getRecipe } from '@/lib/data';
 import { averageRating } from '@/lib/ratings';
 import { rateRecipe } from './actions';
+import { deleteRecipe } from './edit/actions';
 
 export const dynamic = 'force-dynamic';
 
 export default async function RecipePage({ params }) {
   const { id } = await params;
-  const recipe = await getRecipe(id);
+  const user = await getSignedInUser();
+  const ownedRecipe = user ? await getOwnedRecipe(id, user.email) : null;
+  const recipe = ownedRecipe ?? await getRecipe(id);
   if (!recipe) notFound();
 
   const { title, authorName, cuisine, category, prepTimeMinutes, imageUrl, ingredients, steps, ratings, dietaryTags = [] } = recipe;
@@ -29,6 +33,14 @@ export default async function RecipePage({ params }) {
         <div className="recipe-detail-body">
           <h1>{title}</h1>
           <p className="byline">By {authorName}</p>
+          {ownedRecipe && (
+            <div className="filter-actions">
+              <Link href={`/recipes/${id}/edit`} className="button button-primary">Edit recipe</Link>
+              <form action={deleteRecipe.bind(null, id)}>
+                <button type="submit" className="button button-ghost">Delete recipe</button>
+              </form>
+            </div>
+          )}
 
           <dl className="facts">
             <div className="fact">

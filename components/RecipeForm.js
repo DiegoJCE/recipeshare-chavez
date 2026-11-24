@@ -1,7 +1,6 @@
 'use client';
 
 import { useActionState } from 'react';
-import { createRecipe } from '@/app/recipes/new/actions';
 import { CATEGORIES, CUISINES, DIETARY_TAGS } from '@/lib/constants';
 
 const fields = [
@@ -15,9 +14,9 @@ const fields = [
   { name: 'imageUrl', label: 'Image URL', type: 'url' },
 ];
 
-export default function RecipeForm({ authorName }) {
-  const [{ values, errors, attempt }, action, pending] = useActionState(createRecipe, {
-    values: {},
+export default function RecipeForm({ authorName, saveRecipe, initialValues = {} }) {
+  const [{ values, errors, attempt }, action, pending] = useActionState(saveRecipe, {
+    values: initialValues,
     errors: {},
     attempt: 0,
   });

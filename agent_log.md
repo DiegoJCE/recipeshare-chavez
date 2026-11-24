@@ -92,3 +92,7 @@
 [  3.1 min] review (claude): PASS
 [  3.1 min] pushed to GitHub
 [  3.1 min] change (0 more queued): add a simple /privacy page (linked in the footer) saying RecipeShare stores only your Google name and email to show you as a recipe author, and does not share data
+[  4.8 min] committed: change: add a simple /privacy page (linked in the footer) saying Rec
+[  5.1 min] review (claude): PASS
+[  5.2 min] pushed to GitHub
+[ 44.9 min] change (1 more queued): S2: signed-in users can edit and delete their OWN recipes (edit/delete buttons only on their recipes), and the server must reject edit/delete requests for recipes they don't own, even if sent directly. add a test for the ownership check and run all tests

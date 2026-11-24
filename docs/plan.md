@@ -22,3 +22,4 @@ One step at a time, in order. Tick a step off (`- [x]`) only when it works. Must
 - [ ] 18. S4: Upload recipe photos to Vercel Blob and verify they persist after redeployment.
 - [ ] 19. S1: Add optional Google sign-in, recipe authorship, a profile, and a privacy page. Verify the signed-in flow on the deployed app.
   - [x] Verify the footer links to the privacy notice locally and test how it describes Google's name and email data.
+- [x] 20. S2: Add owner-only edit and delete controls, enforce ownership on the server, and verify locally with app smoke checks and server-action tests.

@@ -1,17 +1,9 @@
 VERDICT: PASS
 
-I found no crashes or spec violations in this commit. I read `docs/spec.md` because there is no `SPEC.md`. I reviewed the diff by reading it and didn't run the tests.
+I read the diff and the working tree. The spec is at `docs/spec.md`, because there is no `SPEC.md`. I couldn't run the tests or the build, because the sandbox denied the commands, so nothing here was executed.
 
-- **`auth.js`:**
-  - Google is now registered only when the env vars are set, and `signIn` accepts only a verified Google profile that has a name and an email. This matches S1 and the CLAUDE.md "no secrets" rule.
-  - `getSignedInUser()` treats a session without a name or email as a guest, so guests can still browse, submit and rate.
-  - The test mocks `next-auth`, so it checks the callback logic but not a real sign-in.
-- **`auth.test.js`:** the three tests cover the unconfigured case, the sign-in rules and incomplete sessions. They match the code.
-- **`orchestrate.py` (non-blocking):**
-  - If the time budget runs out partway through a queued batch, the loop exits and the remaining queued changes are dropped without a log line.
-  - `args.minutes == 40` detects "the user didn't pass `--minutes`" by comparing to the default. Passing `--minutes 40` explicitly still gets 120.
-  - The final `push()` after the loop repeats the per-change push. It does no harm.
-  - `DEADLINE` is reset only when the queue is empty, so every change in a batch shares one 120-minute budget.
-  - The commit message is cut off mid-sentence ("started in the last"), which is cosmetic.
-
-I did not check that the app lets you sign out from the header, stores the email privately, or links a privacy page from the footer. S1 requires all three, and none of them is in this diff.
+- **Spec (S1):** the footer link to `/privacy` is in `app/layout.js:46`. It was committed earlier, so it isn't in this diff, but it is present. `app/privacy/page.jsx` explains what is stored and why: the Google name and email, the name shown on recipes, and the email kept private. It also says nothing is shared with third parties. That covers the privacy-page clause of S1.
+- **`page.js` to `page.jsx` rename:** this is clean. The old file is deleted, so there is no duplicate route. The new file adds `import React`, which the classic JSX transform needs in the vitest node environment. The test imports `./page` without an extension. I expect Vite to resolve it to `.jsx`, but I didn't run it.
+- **`app/privacy/page.test.js`:** it sits next to the route but isn't a route, since Next only treats `page.js` and similar names as routes. The assertions match the page text exactly, so they should pass.
+- **Minor, copy accuracy:** the page says the email is stored and shown on the profile. This commit doesn't show that the app stores the email at all. If `auth.js` or the profile page doesn't store it, the privacy text overstates. This is outside this diff, so it wasn't checked.
+- **Minor, process:** `docs/plan.md` adds a ticked sub-item under step 19, which is still unticked. That is fine, since S1's deployed-flow check is still open. The commit also rewrites `REVIEW.md` and `agent_log.md`, which has no app impact.
