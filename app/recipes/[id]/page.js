@@ -5,9 +5,9 @@ import RatingForm from '@/components/RatingForm';
 import RecipePhoto from '@/components/RecipePhoto';
 import ServingsScaler from '@/components/ServingsScaler';
 import { getSignedInUser } from '@/auth';
-import { getComments, getOwnedRecipe, getRecipe } from '@/lib/data';
+import { getComments, getOwnedRecipe, getRecipe, isRecipeFavorite } from '@/lib/data';
 import { averageRating } from '@/lib/ratings';
-import { postComment, rateRecipe } from './actions';
+import { postComment, rateRecipe, updateFavorite } from './actions';
 import { deleteRecipe } from './edit/actions';
 
 export const dynamic = 'force-dynamic';
@@ -18,7 +18,10 @@ export default async function RecipePage({ params }) {
   const ownedRecipe = user ? await getOwnedRecipe(id, user) : null;
   const recipe = ownedRecipe ?? await getRecipe(id);
   if (!recipe) notFound();
-  const comments = await getComments(id);
+  const [comments, favorite] = await Promise.all([
+    getComments(id),
+    user ? isRecipeFavorite(id, user) : false,
+  ]);
 
   const { title, authorName, cuisine, category, prepTimeMinutes, imageUrl, ingredients, steps, ratings, dietaryTags = [] } = recipe;
   const ratingCount = ratings.length;
@@ -35,11 +38,20 @@ export default async function RecipePage({ params }) {
         <div className="recipe-detail-body">
           <h1>{title}</h1>
           <p className="byline">By {authorName}</p>
-          {ownedRecipe && (
+          {user && (
             <div className="filter-actions">
-              <Link href={`/recipes/${id}/edit`} className="button button-primary">Edit recipe</Link>
-              <form action={deleteRecipe.bind(null, id)}>
-                <button type="submit" className="button button-ghost">Delete recipe</button>
+              {ownedRecipe && (
+                <>
+                  <Link href={`/recipes/${id}/edit`} className="button button-primary">Edit recipe</Link>
+                  <form action={deleteRecipe.bind(null, id)}>
+                    <button type="submit" className="button button-ghost">Delete recipe</button>
+                  </form>
+                </>
+              )}
+              <form action={updateFavorite.bind(null, id, !favorite)}>
+                <button type="submit" className="button button-ghost">
+                  {favorite ? 'Remove from favorites' : 'Add to favorites'}
+                </button>
               </form>
             </div>
           )}

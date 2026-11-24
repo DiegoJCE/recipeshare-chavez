@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getSignedInUser, googleSignInEnabled } from '@/auth';
 import RecipeCard from '@/components/RecipeCard';
-import { getRecipesByAuthor } from '@/lib/data';
+import { getFavoriteRecipes, getRecipesByAuthor } from '@/lib/data';
 import { signInWithGoogle } from '../auth-actions';
 
 export const dynamic = 'force-dynamic';
@@ -23,7 +23,10 @@ export default async function ProfilePage() {
     );
   }
 
-  const recipes = await getRecipesByAuthor(user);
+  const [recipes, favorites] = await Promise.all([
+    getRecipesByAuthor(user),
+    getFavoriteRecipes(user),
+  ]);
 
   return (
     <main>
@@ -35,6 +38,16 @@ export default async function ProfilePage() {
           ))}
         </ul>
       ) : <p>You haven’t added any recipes yet. <Link href="/recipes/new">Add a recipe</Link>.</p>}
+      <section aria-labelledby="favorites-heading">
+        <h2 id="favorites-heading">My favorites</h2>
+        {favorites.length ? (
+          <ul className="recipe-grid">
+            {favorites.map((recipe) => (
+              <li key={recipe.id}><RecipeCard recipe={recipe} /></li>
+            ))}
+          </ul>
+        ) : <p>You haven’t favorited any recipes yet.</p>}
+      </section>
     </main>
   );
 }

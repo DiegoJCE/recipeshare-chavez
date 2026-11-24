@@ -28,3 +28,4 @@ One step at a time, in order. Tick a step off (`- [x]`) only when it works. Must
 - [ ] 21. S3: Require sign-in for ratings, replace each user's previous rating, and block authors from rating their own recipes. Verify these rules on the deployed app.
   - [x] Verify the rating controls locally and test the server rules.
 - [x] 22. Could: Add public recipe comments with Google sign-in required to post, enforce the 500-character limit and plain-text rendering, and verify locally.
+- [x] 23. Could: Let signed-in users add or remove favorites from recipe details and list them on their profile. Test account isolation and verify locally.

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { getSignedInUser } from '../../../auth.js';
-import { addComment, addRating } from '../../../lib/data.js';
+import { addComment, addRating, setRecipeFavorite } from '../../../lib/data.js';
 import { COMMENT_MAX_LENGTH, isValidComment } from '../../../lib/comments.js';
 import { isValidRating } from '../../../lib/ratings.js';
 
@@ -17,6 +17,16 @@ export async function rateRecipe(id, formData) {
 
   revalidatePath(`/recipes/${id}`);
   revalidatePath('/');
+}
+
+export async function updateFavorite(id, favorite) {
+  if (typeof id !== 'string' || typeof favorite !== 'boolean') return;
+  const user = await getSignedInUser();
+  if (!user) return;
+
+  await setRecipeFavorite(id, user, favorite);
+  revalidatePath(`/recipes/${id}`);
+  revalidatePath('/profile');
 }
 
 export async function postComment(id, previousState, formData) {

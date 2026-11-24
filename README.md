@@ -83,7 +83,7 @@ See the [product specification](docs/spec.md) for acceptance criteria.
 | S5 | Search by title or ingredient alongside filters | Done |
 | S6 | Sort by newest or highest rated | Done |
 | Could | Public recipe comments with Google sign-in to post | Done |
-| Could | Favorites on a profile page | Not done |
+| Could | Favorites on a profile page | Done |
 | Could | Servings scaler | Done |
 | Could | Embedded recipe video | Not done |
 | Could | Dietary tags and filtering | Done |

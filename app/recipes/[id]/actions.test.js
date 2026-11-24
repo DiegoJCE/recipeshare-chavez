@@ -1,11 +1,15 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 import { revalidatePath } from 'next/cache';
 import { getSignedInUser } from '../../../auth.js';
-import { addComment, addRating } from '../../../lib/data.js';
-import { postComment, rateRecipe } from './actions.js';
+import { addComment, addRating, setRecipeFavorite } from '../../../lib/data.js';
+import { postComment, rateRecipe, updateFavorite } from './actions.js';
 
 vi.mock('../../../auth.js', () => ({ getSignedInUser: vi.fn() }));
-vi.mock('../../../lib/data.js', () => ({ addComment: vi.fn(), addRating: vi.fn() }));
+vi.mock('../../../lib/data.js', () => ({
+  addComment: vi.fn(),
+  addRating: vi.fn(),
+  setRecipeFavorite: vi.fn(),
+}));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 
 const recipeId = 'test-recipe';
@@ -21,6 +25,19 @@ function commentForm(body) {
   form.set('authorName', 'Forged name');
   return form;
 }
+
+it('rejects direct favorite requests from visitors', async () => {
+  await updateFavorite(recipeId, true);
+  expect(setRecipeFavorite).not.toHaveBeenCalled();
+  expect(revalidatePath).not.toHaveBeenCalled();
+});
+
+it.each([true, false])('sets favorite status to %s for the signed-in user', async (favorite) => {
+  vi.mocked(getSignedInUser).mockResolvedValue(reader);
+  await updateFavorite(recipeId, favorite);
+  expect(setRecipeFavorite).toHaveBeenCalledWith(recipeId, reader, favorite);
+  expect(revalidatePath.mock.calls).toEqual([[`/recipes/${recipeId}`], ['/profile']]);
+});
 
 it('rejects guest comments even when an author name is submitted', async () => {
   expect(await postComment(recipeId, {}, commentForm('Looks good!'))).toEqual({
