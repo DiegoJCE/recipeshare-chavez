@@ -1,10 +1,19 @@
-VERDICT: PASS
+VERDICT: FAIL
 
-I read the diff and `docs/spec.md`. `SPEC.md` doesn't exist, so I used `docs/spec.md`. I didn't run the tests or the build. I found no crash or spec contradiction. S4 ("upload an image file, and it still shows after redeploying") is met by storing the photo in Vercel Blob and saving its public URL.
+The commit only edits `README.md`, `REVIEW.md` and `agent_log.md`. It has no code changes, so nothing in it can crash. The problems are about what the README now claims.
 
-Minor problems, none blocking:
-- **Blob token is unverified.** `BLOB_READ_WRITE_TOKEN` is only listed in `.env.example`. Until a Blob store is connected to the Vercel project, every upload fails with the inline "could not be uploaded" error. Spec §3 says a feature counts as done only when it passes on the deployed app, so S4 shouldn't be ticked until that's checked live.
-- **The chosen file is lost after a server-side error.** The photo input is keyed on `attempt`, so a failed upload or validation remounts it and empties it. The user has to pick the file again. The pasted URL is kept.
-- **Orphaned blobs.** Editing a recipe and uploading a new photo, or deleting a recipe, leaves the old blob in storage. This is a storage leak, not a functional bug.
-- **Oversized files can fail without an inline error.** The client check stops files over 4 MB. A request that gets past it but exceeds the 4.5 MB `bodySizeLimit` makes the server action throw. The limit also sits close to Vercel's own request-body cap. Both are edge cases.
-- **Commit message.** It is garbled ("let the user EIT"), a cosmetic problem.
+- **S1, S2 and S4 are marked "Done" with no deployed verification.** Spec line 20 says a feature is done only when its acceptance criterion passes on the deployed app.
+  - `docs/plan.md` steps 18, 19 and 20 (S4, S1, S2) are still unticked (`- [ ]`).
+  - Each of those steps requires a check on the deployed app.
+  - The README's own "Verify…" notes for S1 and S2 (lines 91–92) are still there as to-dos.
+- **S4's acceptance criterion is "still shows after redeploying".**
+  - Nothing shows that a Vercel Blob store is connected or that `BLOB_READ_WRITE_TOKEN` is set on Vercel.
+  - The previous review (`REVIEW.md`, which this commit rewrites) says every upload fails without it and that S4 shouldn't be ticked until checked live. The commit ticks it anyway.
+- **S3 stays "Done" although its live check is also missing.** The previous review flagged it.
+- **S1's "Done" claim also conflicts with the spec.**
+  - S1 says visitors can still rate without an account.
+  - S3 now requires sign-in to rate.
+  - The README doesn't note this.
+- **`REVIEW.md` and `agent_log.md` are committed.** They are process artifacts that change on every commit. The log also shows the S4 commit was garbled ("let the user EIT").
+
+Suggested fix: set S1, S2 and S4 to "Partly done" until they pass on the deployed app, then tick the plan steps.

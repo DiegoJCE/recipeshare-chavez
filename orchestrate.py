@@ -125,7 +125,7 @@ def git(*a):
     return run([GIT, *a], timeout=60)
 
 def commit(msg):
-    git("add", "-A")
+    git("add", "-A", "--", ".", ":(exclude,top)REVIEW.md", ":(exclude,top)agent_log.md")
     code, _ = git("commit", "-m", msg)
     if code == 0:
         log(f"committed: {msg}")
