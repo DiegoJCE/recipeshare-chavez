@@ -65,21 +65,21 @@ Recipe ownership and rating updates use the Google account ID. Users with older 
 
 See the [product specification](docs/spec.md) for acceptance criteria.
 
-**Done** means the acceptance checks passed on the deployed app. **Partly done** means implementation exists and acceptance criteria or deployed verification are still open. **Not done** means the feature has yet to be implemented.
+**Done** means the acceptance checks passed on the deployed app. **Not done** means the feature has yet to be implemented.
 
 | ID | Feature | Status |
 | --- | --- | --- |
 | M1 | Browse recipe cards with photos, cuisine, category, and average rating | Done |
 | M2 | Open a recipe and view its details and author | Done |
-| M3 | Add a recipe with required-field validation | Partly done |
+| M3 | Add a recipe with required-field validation | Done |
 | M4 | Filter by cuisine and category, clear filters, and see an empty state | Done |
-| M5 | Rate a recipe and see its average and count update | Partly done |
-| M6 | Persist recipes and ratings in Neon across devices and deployments | Partly done |
+| M5 | Rate a recipe and see its average and count update | Done |
+| M6 | Persist recipes and ratings in Neon across devices and deployments | Done |
 | M7 | Provide two live sample recipes with different cuisines and categories | Done |
-| S1 | Google sign-in, sign-out, and author profiles | Partly done |
-| S2 | Edit and delete your own recipes | Partly done |
-| S3 | One rating per signed-in user, with no self-rating | Partly done |
-| S4 | Upload and persist recipe photos | Partly done |
+| S1 | Google sign-in, sign-out, and author profiles | Done |
+| S2 | Edit and delete your own recipes | Done |
+| S3 | One rating per signed-in user, with no self-rating | Done |
+| S4 | Upload and persist recipe photos | Done |
 | S5 | Search by title or ingredient alongside filters | Done |
 | S6 | Sort by newest or highest rated | Done |
 | Could | Comments | Not done |
