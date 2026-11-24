@@ -104,6 +104,10 @@ S1 and the Must requirements call for guest ratings. S3 calls for signed-in rati
 - **S3** — Verify the deployed app requires sign-in for ratings, replaces a user's previous rating, and blocks authors from rating their own recipes.
 - **S4** — Confirm the production Vercel Blob store is connected, upload a photo, and verify it still displays after redeploying.
 
-## Built with
+## Engineering
 
-RecipeShare was built with AI agents. Claude Opus planned and designed it, Codex built it, and Claude Sonnet reviewed it.
+- **Multi-agent workflow** — Claude Opus plans, Codex builds, and Claude Sonnet reviews every commit.
+- **Tests** — Vitest covers recipe validation and form handling, filters and sorting, rating calculations, servings scaling, video links, sample data, database operations, recipe actions, authentication, photo fallback, the privacy page, and the README.
+- **CI and deployment** — GitHub Actions runs the full test suite and production build on pushes and pull requests. Vercel automatically deploys pushes to `main`.
+- **Security review** — Commit reviews check access controls and untrusted inputs where relevant. See the [review notes](REVIEW.md).
+- **Secrets** — Store secrets only in environment variables, using the git-ignored `.env.local` for local development and Vercel environment settings for deployments.
