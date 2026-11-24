@@ -100,3 +100,5 @@
 [ 48.8 min] review (claude): PASS
 [ 48.8 min] pushed to GitHub
 [ 48.8 min] change (0 more queued): update the README: live URL https://recipeshare-chavez.vercel.app, how to run and test, and the feature checklist (M1-M7, S1, S2, S5, S6 done; S3, S4 not done; Could: servings scaler, dietary tags done)
+[ 49.9 min] committed: change: update the README: live URL https://recipeshare-chavez.verce
+[ 50.1 min] review (claude): FAIL -> fixing with codex

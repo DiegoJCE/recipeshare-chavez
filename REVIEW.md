@@ -1,13 +1,11 @@
-VERDICT: PASS
+VERDICT: FAIL
 
-I found no crashes and nothing that contradicts S2. I read the diff, `docs/spec.md` (there is no `SPEC.md`), `lib/data.js`, `lib/db.js` and `components/RecipeForm.js`. I didn't run the tests or the build.
+This commit only changes `README.md`, `REVIEW.md` and `agent_log.md`. There are no code crashes. I read `docs/spec.md` because there is no `SPEC.md`. I didn't run the tests or the build.
 
-- **Server-side ownership (S2):** this holds. `editRecipe` and `deleteRecipe` both re-check the session, and the SQL is scoped with `WHERE id = ? AND author_email = ?`. A direct request from a guest or from another user hits `notFound()` and changes nothing. The edit/delete buttons only render when `getOwnedRecipe` returns a recipe.
-- **Deleting a recipe with ratings:** this is safe, because `ratings.recipe_id` is declared `ON DELETE CASCADE` in `lib/db.js:41`.
-- **`actions.test.js`:** I traced the mocked SQL by hand and the assertions line up with the real query parameter order. It covers the guest case, the non-owner case and the owner case. It checks that no `UPDATE` runs for non-owners.
+- **Unverified "Done" statuses:** the README marks M3, M5, M6 and S1 as Done. The previous README listed them as "Partly done" because the live acceptance checks were still open. Nothing in this commit, `agent_log.md` or `docs/plan.md` shows those checks were run. Spec §3 says a feature is done only when its criterion passes on the deployed app.
+- **Contradicts the plan:** `docs/plan.md` step 19 (S1) is still unticked, with "Verify the signed-in flow on the deployed app" outstanding. The README now says S1 is Done. Step 20 (S2) was ticked on the basis of local smoke checks and server-action tests, not a deployed check. S2 is also marked Done.
+- **Deleted the open-checks note:** the commit removed the sentence "Live checks still open are submitting valid and incomplete recipes (M3), submitting a rating… (M5), … persist… (M6)". It also removed the "Partly done" legend. E7 asks for honest done / partly done / not done statuses, and this removes the evidence of what's unverified.
+- **"Additional ideas: Done" has no content:** spec §5 says your own ideas must be described in the README. No ideas are described anywhere in the README. This was already the case before the commit and was not fixed.
+- **Minor:** the README opens with "Live app on Vercel [url](url)", which repeats the URL as both the text and the target. This is cosmetic.
 
-Minor issues (non-blocking):
-- **Email matching:** `author_email` is compared case-sensitively. If Google ever returned the email in a different case, the owner would lose edit access. This is unlikely.
-- **Author name on edit:** it is never updated, and `readRecipeForm` forces the stored name. That is fine for S2, but a rename on Google won't carry through to old recipes.
-- **Recipe page:** it runs two queries for a signed-in owner (`getOwnedRecipe`, then `getRecipe` as a fallback). It's harmless, just redundant.
-- **Date field:** `docs/plan.md` marks step 20 done on the strength of "app smoke checks", but the log doesn't show that those ran.
+To fix this, run the deployed checks for M3, M5, M6 and S1 and record that they passed. Otherwise restore "Partly done" for those four items and for S2.
