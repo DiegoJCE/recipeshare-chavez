@@ -15,7 +15,7 @@ const fields = [
   { name: 'imageUrl', label: 'Image URL', type: 'url' },
 ];
 
-export default function RecipeForm() {
+export default function RecipeForm({ authorName }) {
   const [{ values, errors, attempt }, action, pending] = useActionState(createRecipe, {
     values: {},
     errors: {},
@@ -25,7 +25,13 @@ export default function RecipeForm() {
   return (
     <form action={action} noValidate className="recipe-form">
       {fields.map((field) => (
-        <RecipeField key={`${field.name}-${attempt}`} field={field} value={values[field.name]} error={errors[field.name]} />
+        <RecipeField
+          key={`${field.name}-${attempt}`}
+          field={field}
+          value={field.name === 'authorName' && authorName ? authorName : values[field.name]}
+          readOnly={field.name === 'authorName' && Boolean(authorName)}
+          error={errors[field.name]}
+        />
       ))}
       <fieldset key={attempt} className="field-wide dietary-fields">
         <legend className="field-label">Dietary tags (optional)</legend>
@@ -43,7 +49,7 @@ export default function RecipeForm() {
   );
 }
 
-function RecipeField({ field, value, error }) {
+function RecipeField({ field, value, readOnly, error }) {
   const { name, label, options, multiline, type = 'text', min, step } = field;
   const errorId = `${name}-error`;
   const props = {
@@ -55,7 +61,7 @@ function RecipeField({ field, value, error }) {
     'aria-describedby': error ? errorId : undefined,
   };
 
-  let input = <input {...props} type={type} min={min} step={step} />;
+  let input = <input {...props} type={type} min={min} step={step} readOnly={readOnly} />;
   if (options) {
     input = (
       <select {...props}>

@@ -132,6 +132,24 @@ main.narrow {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.site-nav > a:not(.button) {
+  color: inherit;
+}
+
+.site-footer {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: 1rem 1.25rem;
 }
 
 .brand {

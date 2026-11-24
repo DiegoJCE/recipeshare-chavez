@@ -35,7 +35,7 @@ S1 must be done before S2 and S3.
 
 | ID | User story | Acceptance criterion |
 |---|---|---|
-| S1 | As a visitor, I want to sign in with Google so that my recipes and ratings are linked to me. | I can sign in with Google and sign out. When signed in, my name is the author of my new recipes, and a profile page lists my recipes. |
+| S1 | As a visitor, I want to sign in with Google so that my recipes are linked to me. | I can sign in with Google and sign out from the header. My new recipes show my Google name and store my email privately so that only my account sees them on its profile. Visitors can still browse, filter, submit recipes with an author name, and rate without an account. The footer links to a privacy page explaining how RecipeShare uses Google names and emails. |
 | S2 | As an author, I want to edit or delete my own recipes so that I can fix mistakes. | I can edit and delete my own recipes, but not other people's, even by sending the request directly to the server. |
 | S3 | As a signed-in user, I want fair ratings so that the average means something. | Only signed-in users can rate; one rating per user per recipe (rating again replaces it); authors cannot rate their own recipes. |
 | S4 | As an author, I want to upload a photo instead of pasting a link. | I can upload an image file, and it still shows after redeploying. |

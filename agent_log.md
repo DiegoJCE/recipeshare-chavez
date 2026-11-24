@@ -75,3 +75,11 @@
 [ 22.6 min] change: if an image link fails to load, show a styled placeholder (passport-themed) instead of a broken image, on cards and the detail page make sure there are tests for keyword search, sorting, and the dietary tag filter; add any that are missing and run all tests update the README feature checklist to match what's done
 [ 25.7 min] committed: change: if an image link fails to load, show a styled plac
 [ 26.0 min] review (claude): FAIL -> fixing with codex
+[ 27.6 min] committed: fix after review (codex)
+[ 27.9 min] review (claude): PASS
+[ 27.9 min] pushed to GitHub
+[ 27.9 min] done
+[  0.0 min] edit mode. builder: codex. reviewer: claude sonnet
+[ 48.7 min] change: S1: Google sign-in with Auth.js (next-auth v5) using env vars AUTH_SECRET, AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET (add the names to .env.example). Sign in / sign out button in the header. When signed in, the user's name is the author of new recipes (store the user's email with the recipe). Add a /profile page listing the signed-in user's recipes. Visitors who are NOT signed in must still be able to browse, filter, add recipes with an author name, and rate, exactly as before. npm run build must still pass without the auth env vars. Add a test and run all tests. add a simple /privacy page (linked in the footer) saying RecipeShare stores only your Google name and email to show you as a recipe author, and does not share data
+[ 52.9 min] codex builder failed (TIMEOUT) -> switching builder to sonnet
+[ 53.4 min] claude (sonnet) exited 124: TIMEOUT

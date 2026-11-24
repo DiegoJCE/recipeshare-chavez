@@ -1,11 +1,13 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import { addRecipe } from '@/lib/data';
-import { validateRecipe } from '@/lib/validate';
-import { DIETARY_TAGS } from '@/lib/constants';
+import { addRecipe } from '../../../lib/data.js';
+import { validateRecipe } from '../../../lib/validate.js';
+import { DIETARY_TAGS } from '../../../lib/constants.js';
+import { getSignedInUser } from '../../../auth.js';
 
 export async function createRecipe(previousState, formData) {
+  const user = await getSignedInUser();
   const values = Object.fromEntries(
     ['authorName', 'title', 'cuisine', 'category', 'ingredients', 'steps', 'prepTimeMinutes', 'imageUrl']
       .map((field) => {
@@ -13,6 +15,7 @@ export async function createRecipe(previousState, formData) {
         return [field, typeof value === 'string' ? value : ''];
       }),
   );
+  if (user) values.authorName = user.name;
   const selectedTags = formData.getAll('dietaryTags');
   values.dietaryTags = DIETARY_TAGS.filter((tag) => selectedTags.includes(tag));
   const errors = validateRecipe(values);
@@ -23,6 +26,7 @@ export async function createRecipe(previousState, formData) {
   const recipe = {
     ...values,
     authorName: values.authorName.trim(),
+    authorEmail: user?.email ?? null,
     title: values.title.trim(),
     ingredients: splitLines(values.ingredients),
     steps: splitLines(values.steps),

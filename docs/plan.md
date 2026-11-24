@@ -20,3 +20,4 @@ One step at a time, in order. Tick a step off (`- [x]`) only when it works. Must
 - [x] 16. Could: Scale ingredient quantities on the detail page and test quantity formats.
 - [x] 17. Could: Store dietary tags, show them on cards, and test filtering.
 - [ ] 18. S4: Upload recipe photos to Vercel Blob and verify they persist after redeployment.
+- [ ] 19. S1: Add optional Google sign-in, recipe authorship, a profile, and a privacy page. Verify the signed-in flow on the deployed app.

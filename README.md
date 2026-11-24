@@ -47,6 +47,11 @@ Pushes to `main` automatically deploy to production on Vercel. GitHub Actions ru
 ## Environment variables
 
 - `DATABASE_URL`
+- `AUTH_SECRET`
+- `AUTH_GOOGLE_ID`
+- `AUTH_GOOGLE_SECRET`
+
+Google sign-in is enabled when all three auth variables are set. In your Google OAuth web client, register `http://localhost:3000/api/auth/callback/google` for local development and the same path on your deployment origin. [Auth.js Google provider setup](https://authjs.dev/getting-started/providers/google)
 
 ## Feature checklist
 
@@ -61,7 +66,7 @@ See the [product specification](docs/spec.md) for acceptance criteria. For Must 
 | M5 | Rate a recipe and see its average and count update | Partly done |
 | M6 | Persist recipes and ratings in Neon across devices and deployments | Partly done |
 | M7 | Provide two live sample recipes with different cuisines and categories | Done |
-| S1 | Google sign-in, sign-out, and author profiles | Not done |
+| S1 | Google sign-in, sign-out, and author profiles | Partly done |
 | S2 | Edit and delete your own recipes | Not done |
 | S3 | One rating per signed-in user, with no self-rating | Not done |
 | S4 | Upload and persist recipe photos | Not done |
