@@ -1,32 +1,18 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 import { revalidatePath } from 'next/cache';
 import { getSignedInUser } from '../../../auth.js';
-import { getDatabase } from '../../../lib/db.js';
+import { addRating } from '../../../lib/data.js';
 import { rateRecipe } from './actions.js';
 
 vi.mock('../../../auth.js', () => ({ getSignedInUser: vi.fn() }));
-vi.mock('../../../lib/db.js', () => ({ getDatabase: vi.fn() }));
+vi.mock('../../../lib/data.js', () => ({ addRating: vi.fn() }));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 
 const recipeId = 'test-recipe';
 const author = { email: 'author@example.com', googleSubject: 'google-author' };
 const reader = { email: author.email, googleSubject: 'google-reader' };
-const ratings = new Map();
-const sql = vi.fn((parts, value, subject, id, ownershipSubject) => {
-  const query = parts.join('?');
-  expect(query).toContain('WHERE id = ? AND author_google_subject IS DISTINCT FROM ?');
-  expect(query).toContain('ON CONFLICT (recipe_id, rater_google_subject) DO UPDATE SET value = EXCLUDED.value');
-  expect(ownershipSubject).toBe(subject);
-  if (id !== recipeId || ownershipSubject === author.googleSubject) return [];
-
-  ratings.set(subject, value);
-  return [{ id: 1 }];
-});
-
 beforeEach(() => {
-  vi.clearAllMocks();
-  ratings.clear();
-  vi.mocked(getDatabase).mockResolvedValue(sql);
+  vi.resetAllMocks();
 });
 
 function ratingForm(value) {
@@ -36,39 +22,28 @@ function ratingForm(value) {
   return form;
 }
 
-it('replaces a signed-in reader’s rating and refreshes the detail and card', async () => {
+it('passes the signed-in identity to the data layer and refreshes both pages on success', async () => {
   vi.mocked(getSignedInUser).mockResolvedValue(reader);
-  await rateRecipe(recipeId, ratingForm('2'));
-  expect([...ratings.values()]).toEqual([2]);
-
-  vi.mocked(revalidatePath).mockClear();
+  vi.mocked(addRating).mockResolvedValue(true);
   await rateRecipe(recipeId, ratingForm('5'));
 
-  expect([...ratings]).toEqual([[reader.googleSubject, 5]]);
+  expect(addRating).toHaveBeenCalledWith(recipeId, 5, reader);
   expect(revalidatePath.mock.calls).toEqual([[`/recipes/${recipeId}`], ['/']]);
 });
 
-it('rejects an author’s direct rating request even with a reader’s subject in the form', async () => {
+it('uses the session identity even with a different subject in the submitted form', async () => {
   vi.mocked(getSignedInUser).mockResolvedValue(author);
+  vi.mocked(addRating).mockResolvedValue(false);
   await rateRecipe(recipeId, ratingForm('5'));
 
-  expect(sql).toHaveBeenCalledWith(expect.any(Array), 5, author.googleSubject, recipeId, author.googleSubject);
-  expect(ratings.size).toBe(0);
+  expect(addRating).toHaveBeenCalledWith(recipeId, 5, author);
   expect(revalidatePath).not.toHaveBeenCalled();
 });
 
-it('rejects a visitor’s direct rating request before accessing the database', async () => {
+it('rejects a visitor?s direct rating request before accessing the database', async () => {
   vi.mocked(getSignedInUser).mockResolvedValue(null);
   await rateRecipe(recipeId, ratingForm('5'));
 
-  expect(getDatabase).not.toHaveBeenCalled();
-  expect(revalidatePath).not.toHaveBeenCalled();
-});
-
-it('skips revalidation when the recipe does not exist', async () => {
-  vi.mocked(getSignedInUser).mockResolvedValue(reader);
-  await rateRecipe('missing', ratingForm('5'));
-
-  expect(ratings.size).toBe(0);
+  expect(addRating).not.toHaveBeenCalled();
   expect(revalidatePath).not.toHaveBeenCalled();
 });

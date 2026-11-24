@@ -59,7 +59,7 @@ Google sign-in is enabled when all three auth variables are set. In your Google 
 
 Photo uploads require a Vercel Blob store and `BLOB_READ_WRITE_TOKEN` in the runtime environment. Recipes can also use an image URL.
 
-Recipe ownership and rating updates use the Google account ID. After deploying this change, users with older sessions need to sign in again. Existing recipes and ratings remain visible. To restore account access to a legacy row, verify the original account ID against a trusted record from before the change, then set `recipes.author_google_subject` or `ratings.rater_google_subject` for the verified row. A matching email alone cannot establish that link. If the verified account has already rated the same recipe after the change, keep its newer rating and remove the verified legacy duplicate in the same transaction.
+Recipe ownership and rating updates use the Google account ID. Users with older sessions need to sign in again. For legacy recipes and ratings saved before account IDs were stored, RecipeShare matches the verified Google email used originally. Editing a legacy recipe links it to the current Google account ID. Rating a recipe again replaces any matching legacy rating and saves the new score under that account ID.
 
 ## Feature checklist
 

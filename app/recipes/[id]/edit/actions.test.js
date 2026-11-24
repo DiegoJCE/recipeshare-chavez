@@ -1,11 +1,13 @@
 import { beforeEach, expect, it, vi } from 'vitest';
 import { getSignedInUser } from '../../../../auth.js';
-import { getDatabase } from '../../../../lib/db.js';
+import { deleteOwnedRecipe, getOwnedRecipe, updateOwnedRecipe } from '../../../../lib/data.js';
 import { sampleRecipes } from '../../../../lib/sampleRecipes.js';
 import { deleteRecipe, editRecipe } from './actions.js';
 
 vi.mock('../../../../auth.js', () => ({ getSignedInUser: vi.fn() }));
-vi.mock('../../../../lib/db.js', () => ({ getDatabase: vi.fn() }));
+vi.mock('../../../../lib/data.js', () => ({
+  deleteOwnedRecipe: vi.fn(), getOwnedRecipe: vi.fn(), updateOwnedRecipe: vi.fn(),
+}));
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }));
 vi.mock('next/navigation', () => ({
   notFound: () => { throw new Error('Not found'); },
@@ -15,21 +17,8 @@ vi.mock('next/navigation', () => ({
 const recipe = sampleRecipes[0];
 const owner = { name: recipe.authorName, email: 'owner@example.com', googleSubject: 'google-owner' };
 const otherUser = { name: owner.name, email: owner.email, googleSubject: 'google-other' };
-const sql = vi.fn((parts, ...params) => {
-  const query = parts.join('?');
-  if (query.includes('SELECT r.id')) {
-    expect(query).toContain('r.author_google_subject = ?');
-    const [, id, , subject] = params;
-    return id === recipe.id && subject === owner.googleSubject ? [recipe] : [];
-  } else {
-    expect(query).toContain('WHERE id = ? AND author_google_subject = ?');
-  }
-  return params.at(-2) === recipe.id && params.at(-1) === owner.googleSubject ? [recipe] : [];
-});
-
 beforeEach(() => {
-  sql.mockClear();
-  vi.mocked(getDatabase).mockResolvedValue(sql);
+  vi.resetAllMocks();
 });
 
 function recipeForm() {
@@ -47,24 +36,25 @@ it.each([null, otherUser])('rejects direct edit and delete requests from %j', as
 
   await expect(editRecipe(recipe.id, { attempt: 0 }, recipeForm())).rejects.toThrow('Not found');
   await expect(deleteRecipe(recipe.id)).rejects.toThrow('Not found');
-  expect(sql.mock.calls.some(([parts]) => parts.join('?').includes('UPDATE recipes'))).toBe(false);
+  expect(updateOwnedRecipe).not.toHaveBeenCalled();
   if (user) {
-    expect(sql).toHaveBeenLastCalledWith(expect.any(Array), recipe.id, user.googleSubject);
+    expect(getOwnedRecipe).toHaveBeenCalledWith(recipe.id, user);
+    expect(deleteOwnedRecipe).toHaveBeenCalledWith(recipe.id, user);
   } else {
-    expect(sql).not.toHaveBeenCalled();
+    expect(getOwnedRecipe).not.toHaveBeenCalled();
+    expect(deleteOwnedRecipe).not.toHaveBeenCalled();
   }
 });
 
-it('lets the owner update and delete their recipe', async () => {
+it('passes the session identity to the edit and delete operations', async () => {
   vi.mocked(getSignedInUser).mockResolvedValue(owner);
+  vi.mocked(getOwnedRecipe).mockResolvedValue(recipe);
+  vi.mocked(updateOwnedRecipe).mockResolvedValue(true);
+  vi.mocked(deleteOwnedRecipe).mockResolvedValue(true);
 
   await expect(editRecipe(recipe.id, { attempt: 0 }, recipeForm())).rejects.toThrow(`Redirect to /recipes/${recipe.id}`);
-  const [parts, title, ...params] = sql.mock.lastCall;
-  expect(parts.join('?')).toContain('UPDATE recipes');
-  expect(title).toBe('Updated recipe');
-  expect(params.slice(-2)).toEqual([recipe.id, owner.googleSubject]);
+  expect(updateOwnedRecipe).toHaveBeenCalledWith(recipe.id, owner, expect.objectContaining({ title: 'Updated recipe' }));
 
   await expect(deleteRecipe(recipe.id)).rejects.toThrow('Redirect to /');
-  expect(sql.mock.lastCall[0].join('?')).toContain('DELETE FROM recipes');
-  expect(sql).toHaveBeenLastCalledWith(expect.any(Array), recipe.id, owner.googleSubject);
+  expect(deleteOwnedRecipe).toHaveBeenCalledWith(recipe.id, owner);
 });

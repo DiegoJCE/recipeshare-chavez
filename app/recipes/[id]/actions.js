@@ -12,7 +12,7 @@ export async function rateRecipe(id, formData) {
   const rating = Number(value);
   if (!isValidRating(rating)) return;
   const user = await getSignedInUser();
-  if (!user || !(await addRating(id, rating, user.googleSubject))) return;
+  if (!user || !(await addRating(id, rating, user))) return;
 
   revalidatePath(`/recipes/${id}`);
   revalidatePath('/');

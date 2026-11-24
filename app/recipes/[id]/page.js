@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 export default async function RecipePage({ params }) {
   const { id } = await params;
   const user = await getSignedInUser();
-  const ownedRecipe = user ? await getOwnedRecipe(id, user.googleSubject) : null;
+  const ownedRecipe = user ? await getOwnedRecipe(id, user) : null;
   const recipe = ownedRecipe ?? await getRecipe(id);
   if (!recipe) notFound();
 
