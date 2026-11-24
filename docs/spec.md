@@ -38,13 +38,16 @@ S1 must be done before S2 and S3.
 | S1 | As a visitor, I want to sign in with Google so that my recipes and ratings are linked to me. | I can sign in with Google and sign out. When signed in, my name is the author of my new recipes, and a profile page lists my recipes. |
 | S2 | As an author, I want to edit or delete my own recipes so that I can fix mistakes. | I can edit and delete my own recipes, but not other people's, even by sending the request directly to the server. |
 | S3 | As a signed-in user, I want fair ratings so that the average means something. | Only signed-in users can rate; one rating per user per recipe (rating again replaces it); authors cannot rate their own recipes. |
-| S4 | As an author, I want to upload a photo instead of pasting a link. | I can upload an image file, and it still shows after redeploying. |
+| S4 | As an author, I want to upload a photo instead of pasting a link. | I can upload a JPEG, PNG, or WebP file up to 3 MB to Vercel Blob, and it still shows after redeploying. I can also provide an image URL. |
 | S5 | As a visitor, I want to search by keyword so that I can find a recipe by name or ingredient. | Typing "rice" shows recipes with "rice" in the title or ingredients, combined with the filters. |
 | S6 | As a visitor, I want to sort recipes so that I see the best or newest first. | The home page can be sorted by "Newest" and "Highest rated". |
 
 ## 5. Could have features
 
-Comments; favorites on a profile page; a servings scaler; recipe video as an embedded link; dietary tags usable as a filter; a phone-friendly layout; your own ideas (describe them in the README).
+Comments, favorites on a profile page, recipe video as an embedded link, a phone-friendly layout, and additional ideas described in the README.
+
+- **Servings scaler** lets readers enter the original and target servings on a recipe detail page. Supported leading quantities scale proportionally. Ingredient lines without quantities keep their original wording.
+- **Dietary tags** let authors optionally select vegetarian, vegan, gluten-free, or spicy. Selected tags appear on recipe cards and can be used alongside the other home page filters.
 
 ## 6. Engineering requirements
 
@@ -60,5 +63,5 @@ Comments; favorites on a profile page; a servings scaler; recipe video as an emb
 
 - Free plans only, for every service.
 - No payments, no admin panel, no email notifications.
-- Images are links to food photos only; no photos of people.
+- Use food photos only. Recipes may use an image URL or a Vercel Blob upload under S4.
 - Build the Must features first. Do not start Should features until M1 to M7 work.

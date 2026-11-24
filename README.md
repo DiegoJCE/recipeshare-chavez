@@ -1,6 +1,6 @@
 # RecipeShare
 
-RecipeShare lets visitors browse recipes from around the world, filter by cuisine and category, share recipes with a food photo link, and leave 1–5 star ratings. These features are available without an account.
+RecipeShare lets visitors browse recipes from around the world, search by title or ingredient, filter by cuisine, category, and dietary tag, and sort by newest or highest rated. Visitors can share recipes, scale ingredient amounts, and leave 1–5 star ratings without an account.
 
 [Open RecipeShare on Vercel](https://recipeshare-chavez.vercel.app/)
 
@@ -31,6 +31,8 @@ Open [http://localhost:3000](http://localhost:3000). On Windows PowerShell, use 
 
 The app creates the database tables on first use and adds two sample recipes when the recipes table is empty.
 
+To enable file uploads, connect a public Vercel Blob store to the project and set `BLOB_READ_WRITE_TOKEN` in `.env.local` for local development. Photos can be JPEG, PNG, or WebP up to 3 MB. Recipe authors can also provide an image URL.
+
 ## Tests and build
 
 ```sh
@@ -47,6 +49,7 @@ Pushes to `main` automatically deploy to production on Vercel. GitHub Actions ru
 ## Environment variables
 
 - `DATABASE_URL`
+- `BLOB_READ_WRITE_TOKEN` (for Blob uploads outside Vercel or projects using token-based Blob authentication)
 
 ## Feature checklist
 
@@ -64,18 +67,20 @@ See the [product specification](docs/spec.md) for acceptance criteria. For Must 
 | S1 | Google sign-in, sign-out, and author profiles | Not done |
 | S2 | Edit and delete your own recipes | Not done |
 | S3 | One rating per signed-in user, with no self-rating | Not done |
-| S4 | Upload and persist recipe photos | Not done |
-| S5 | Search by title or ingredient alongside filters | Not done |
-| S6 | Sort by newest or highest rated | Not done |
+| S4 | Upload and persist recipe photos | Partly done |
+| S5 | Search by title or ingredient alongside filters | Done |
+| S6 | Sort by newest or highest rated | Done |
 | Could | Comments | Not done |
 | Could | Favorites on a profile page | Not done |
-| Could | Servings scaler | Not done |
+| Could | Servings scaler | Done |
 | Could | Embedded recipe video | Not done |
-| Could | Dietary tags and filtering | Not done |
+| Could | Dietary tags and filtering | Done |
 | Could | Phone-friendly layout | Done |
 | Could | Additional ideas | Not done |
 
 Live checks still open are submitting valid and incomplete recipes (M3), submitting a rating and confirming the updated average and count (M5), and checking that new data persists across devices and a redeploy (M6).
+
+S4 has upload code and automated coverage. Uploading to a connected Blob store and confirming the photo survives a redeploy remain to be verified.
 
 ## Built with
 

@@ -1,9 +1,13 @@
 import Link from 'next/link';
-import { CATEGORIES, CUISINES } from '@/lib/constants';
+import { CATEGORIES, CUISINES, DIETARY_TAGS } from '@/lib/constants';
 
-export default function FilterBar({ cuisine, category }) {
+export default function FilterBar({ cuisine, category, q, sort, dietaryTag }) {
   return (
     <form action="/" method="get" className="filter-bar">
+      <label className="field">
+        <span className="field-label">Search recipes</span>
+        <input name="q" type="search" placeholder="Title or ingredient" defaultValue={q} />
+      </label>
       <label className="field">
         <span className="field-label">Cuisine</span>
         <select name="cuisine" defaultValue={cuisine}>
@@ -20,6 +24,20 @@ export default function FilterBar({ cuisine, category }) {
           {CATEGORIES.map((option) => (
             <option key={option}>{option}</option>
           ))}
+        </select>
+      </label>
+      <label className="field">
+        <span className="field-label">Dietary tag</span>
+        <select name="dietaryTag" defaultValue={dietaryTag}>
+          <option value="">All</option>
+          {DIETARY_TAGS.map((tag) => <option key={tag}>{tag}</option>)}
+        </select>
+      </label>
+      <label className="field">
+        <span className="field-label">Sort by</span>
+        <select name="sort" defaultValue={sort === 'highest-rated' ? sort : 'newest'}>
+          <option value="newest">Newest</option>
+          <option value="highest-rated">Highest rated</option>
         </select>
       </label>
       <div className="filter-actions">

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import RatingForm from '@/components/RatingForm';
+import ServingsScaler from '@/components/ServingsScaler';
 import { getRecipe } from '@/lib/data';
 import { averageRating } from '@/lib/ratings';
 import { rateRecipe } from './actions';
@@ -12,7 +13,7 @@ export default async function RecipePage({ params }) {
   const recipe = await getRecipe(id);
   if (!recipe) notFound();
 
-  const { title, authorName, cuisine, category, prepTimeMinutes, imageUrl, ingredients, steps, ratings } = recipe;
+  const { title, authorName, cuisine, category, prepTimeMinutes, imageUrl, ingredients, steps, ratings, dietaryTags = [] } = recipe;
   const ratingCount = ratings.length;
 
   return (
@@ -41,6 +42,12 @@ export default async function RecipePage({ params }) {
               <dt>Prep time</dt>
               <dd>{prepTimeMinutes} minutes</dd>
             </div>
+            {dietaryTags.length > 0 && (
+              <div className="fact">
+                <dt>Dietary tags</dt>
+                <dd>{dietaryTags.join(', ')}</dd>
+              </div>
+            )}
             <div className="fact">
               <dt>Average rating</dt>
               <dd>
@@ -56,12 +63,7 @@ export default async function RecipePage({ params }) {
           <RatingForm action={rateRecipe.bind(null, id)} />
 
           <div className="recipe-sections">
-            <section>
-              <h2>Ingredients</h2>
-              <ul className="ingredient-list">
-                {ingredients.map((ingredient, index) => <li key={index}>{ingredient}</li>)}
-              </ul>
-            </section>
+            <ServingsScaler ingredients={ingredients} />
 
             <section>
               <h2>Steps</h2>

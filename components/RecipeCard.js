@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { averageRating } from '@/lib/ratings';
 
 export default function RecipeCard({ recipe }) {
-  const { id, title, imageUrl, cuisine, category, ratings } = recipe;
+  const { id, title, imageUrl, cuisine, category, ratings, dietaryTags = [] } = recipe;
   const ratingCount = ratings.length;
 
   return (
@@ -22,6 +22,11 @@ export default function RecipeCard({ recipe }) {
               <span className="rating-count">({ratingCount} {ratingCount === 1 ? 'rating' : 'ratings'})</span>
             </p>
           </div>
+          {dietaryTags.length > 0 && (
+            <ul className="dietary-tags" aria-label="Dietary tags">
+              {dietaryTags.map((tag) => <li className="tag" key={tag}>{tag}</li>)}
+            </ul>
+          )}
         </div>
       </Link>
     </article>

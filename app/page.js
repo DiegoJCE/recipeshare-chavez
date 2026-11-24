@@ -2,12 +2,16 @@ import FilterBar from '@/components/FilterBar';
 import RecipeCard from '@/components/RecipeCard';
 import { getRecipes } from '@/lib/data';
 import { filterRecipes } from '@/lib/filter';
+import { sortRecipes } from '@/lib/sort';
 
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage({ searchParams }) {
-  const { cuisine = '', category = '' } = await searchParams;
-  const recipes = filterRecipes(await getRecipes(), { cuisine, category });
+  const params = await searchParams;
+  const filters = Object.fromEntries(['cuisine', 'category', 'q', 'sort', 'dietaryTag'].map((name) => [
+    name, typeof params[name] === 'string' ? params[name] : '',
+  ]));
+  const recipes = sortRecipes(filterRecipes(await getRecipes(), filters), filters.sort);
 
   return (
     <main>
@@ -16,7 +20,7 @@ export default async function HomePage({ searchParams }) {
         <h1>RecipeShare</h1>
         <p className="lede">Dishes from cooks around the world. Pick a cuisine, choose a course, and get cooking.</p>
       </section>
-      <FilterBar key={JSON.stringify([cuisine, category])} cuisine={cuisine} category={category} />
+      <FilterBar key={JSON.stringify(filters)} {...filters} />
       {recipes.length ? (
         <ul className="recipe-grid">
           {recipes.map((recipe) => (
